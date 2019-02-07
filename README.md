@@ -48,7 +48,3 @@ extra:
 
 - alcune porte sono bloccate per il ladro (richiedono chiave), ma non per la guardia. Se la guardia non richiude le porte il ladro può passare
 - il passaggio del ladro in alcuni punti può fare rumore ed attirare la guardia (es. cespugli)
-
-wewe
-
-asdsad
