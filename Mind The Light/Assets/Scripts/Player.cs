@@ -1,70 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+[RequireComponent(typeof(PlayerInput))]
+public class Player : MonoBehaviour {
 
-   [SyncVar]
-   private bool isDead = false;
-   public bool IsDead {
-      get { return isDead; }
-      protected set { isDead = value; }
-   }
+   private Actor actor;
+   [HideInInspector]
+   public PlayerInput input;
 
-
-   [SerializeField]
-   private float maxHealth = 100f;
-
-   [SyncVar]
-   private float curHealth;
-
-   public void Setup() {
-      SetDefaults();
-   }
+   private PlayerCamera myCamera;
 
    void Start() {
-        
-    }
+      input = GetComponent<PlayerInput>();
 
-
-    void Update() {
-        
-    }
-
-   [ClientRpc]
-   public void RpcTakeDamage(float amount) {
-      if (IsDead)
-         return;
-
-      curHealth -= amount;
-      Debug.Log(transform.name + " now has " + curHealth + "hp.");
-
-      if(curHealth <= 0) {
-         Die();
-      }
+      actor = GetComponent<Actor>();
+      actor.p = this;
    }
 
-   private void Die() {
-      IsDead = true;
-      // Disable components
-      Debug.Log(transform.name + " is dead.");
+   void Update() {
 
-      StartCoroutine(Respawn());
-   }
-
-   private IEnumerator Respawn() {
-      yield return new WaitForSeconds(GameManager.Instance.matchSettings.respawnTime);
-
-      SetDefaults();
-      Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-      transform.position = spawnPoint.position;
-      transform.rotation = spawnPoint.rotation;
-      Debug.Log(transform.name + " respawned.");
-   }
-
-   public void SetDefaults() {
-      IsDead = false;
-      curHealth = maxHealth;
    }
 }
