@@ -80,10 +80,10 @@ public abstract class Actor : MonoBehaviour {
       // Side
       if (Mathf.Abs(angle) <= 45 || Mathf.Abs(angle) >= 135) {
          if(velocity.magnitude > 0.2f) {
-            anim.Play("guard-run-side");
+            anim.Play("run-side");
          }
          else {
-            anim.Play("guard-idle-side");
+            anim.Play("idle-side");
          }
          sr.flipX = Mathf.Abs(angle) >= 135;
          facing = sr.flipX ? Facing.LEFT : Facing.RIGHT;
@@ -91,27 +91,27 @@ public abstract class Actor : MonoBehaviour {
       // Back
       if(angle > 45 && angle < 135) {
          if (velocity.magnitude > 0.2f) {
-            anim.Play("guard-run-back");
+            anim.Play("run-back");
          }
          else {
-            anim.Play("guard-idle-back");
+            anim.Play("idle-back");
          }
          facing = Facing.TOP;
       }
       // Front
       if(angle > -135 && angle < -45) {
          if (velocity.magnitude > 0.2f) {
-            anim.Play("guard-run-front");
+            anim.Play("run-front");
          }
          else {
-            anim.Play("guard-idle-front");
+            anim.Play("idle-front");
          }
          facing = Facing.DOWN;
       }
 
-     
 
-      //velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+      //velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * maxSpeed;
    }
 
    void FixedUpdate() {

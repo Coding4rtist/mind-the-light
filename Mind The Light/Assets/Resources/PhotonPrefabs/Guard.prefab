@@ -373,5 +373,5 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   viewIdField: 0
-  InstantiationId: 0
+  InstantiationId: 2
   isRuntimeInstantiated: 0
