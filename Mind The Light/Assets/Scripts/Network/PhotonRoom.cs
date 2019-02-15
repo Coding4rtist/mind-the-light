@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using System.IO;
+using TMPro;
 
 public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
@@ -27,8 +27,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
    private float atMaxPlayers;
    private float timeToStart;
 
-   public Text roomNameText;
-   public Text statusText;
+   public TextMeshProUGUI statusText;
    public Transform playersPanel;
    public GameObject playerListingPrefab;
    public GameObject startButton;
@@ -82,7 +81,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
             
             if (timeToStart != startingTime) {
                //Debug.Log("Display time to start to the players " + timeToStart);
-               statusText.text = "Time to start: " + Mathf.RoundToInt(timeToStart);
+               statusText.text = "<style=\"C1\">Time to start: " + Mathf.RoundToInt(timeToStart) + "</style>";
             }
             if(timeToStart <= 0) {
                StartGame();
@@ -95,7 +94,6 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       base.OnJoinedRoom();
       Debug.Log("You are now in room");
 
-      roomNameText.text = room.name;
       UIManager.Instance.ToRoomScreen();
       if(PhotonNetwork.IsMasterClient) {
          startButton.SetActive(true);
@@ -108,7 +106,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
       if(Consts.DELAYED_START) {
          Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
-         statusText.text = "You joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]";
+         statusText.text = "<style=\"C1\">You joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
          if (playersInRoom > 1) {
             readyToCount = true;
          }
@@ -134,7 +132,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       if(PhotonNetwork.InRoom) {
          foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList) {
             GameObject tempListing = Instantiate(playerListingPrefab, playersPanel);
-            Text tempText = tempListing.transform.GetChild(0).GetComponent<Text>();
+            TextMeshProUGUI tempText = tempListing.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             tempText.text = player.NickName;
          }
       }
@@ -151,7 +149,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       playersInRoom++;
       if(Consts.DELAYED_START) {
          Debug.Log("Displayer player in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
-         statusText.text = "A new player has joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]";
+         statusText.text = "<style=\"C1\">A new player has joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
          if (playersInRoom > 1) {
             readyToCount = true;
          }
@@ -209,7 +207,7 @@ public class PhotonRoom : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       base.OnPlayerLeftRoom(otherPlayer);
       playersInRoom--;
       Debug.Log(otherPlayer.NickName + " has left the game");
-      statusText.text = otherPlayer.NickName + "has left the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]";
+      statusText.text = "<style=\"C1\">"+ otherPlayer.NickName + "has left the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
       ClearPlayerListings();
       ListPlayers();
    }

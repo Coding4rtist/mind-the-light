@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using TMPro;
 
 public class RoomListItem : MonoBehaviour {
 
@@ -12,7 +13,7 @@ public class RoomListItem : MonoBehaviour {
    private string roomName;
 
    [SerializeField]
-   private Text roomNameText;
+   private TextMeshProUGUI roomNameText;
 
    //private MatchInfoSnapshot match;
 

@@ -6,14 +6,18 @@ public class Guard : Actor {
 
    private GunController gunController;
 
-   private new void Start() {
-      base.Start();
+   private new void Awake() {
+      base.Awake();
 
       gunController = GetComponent<GunController>();
    }
 
-   private new void Update() {
-      base.Update();
+   public override void UpdateActor() {
+      base.UpdateActor();
+   }
+
+   public override void FixedUpdateActor() {
+      base.FixedUpdateActor();
    }
 
 }

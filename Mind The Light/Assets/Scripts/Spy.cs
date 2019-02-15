@@ -21,14 +21,18 @@ public class Spy : Actor {
       SetDefaults();
    }
 
-   private new void Start() {
-      base.Start();
+   private new void Awake() {
+      base.Awake();
 
       Setup();
    }
 
-   private new void Update() {
-      base.Update();
+   public override void UpdateActor() {
+      base.UpdateActor();
+   }
+
+   public override void FixedUpdateActor() {
+      base.FixedUpdateActor();
    }
 
    public void TakeDamage(float amount) {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public abstract class Actor : MonoBehaviour {
@@ -13,6 +14,7 @@ public abstract class Actor : MonoBehaviour {
 
    public Vector2 velocity;
    public Facing facing;
+   private bool oldFlipX;
 
    public Vector3 movDir = Vector3.zero;
    public float moveForce = 100f;
@@ -25,13 +27,13 @@ public abstract class Actor : MonoBehaviour {
    private Rigidbody2D rb;
    protected SpriteRenderer sr;
 
-   protected void Start() {
+   protected void Awake() {
       anim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody2D>();
       sr = GetComponent<SpriteRenderer>();
    }
 
-   protected void Update() {
+   public virtual void UpdateActor() {
       // Left
       if (p.input.kLeft && !p.input.kRight) {
          if (velocity.x > 0)
@@ -75,54 +77,43 @@ public abstract class Actor : MonoBehaviour {
 
       // Face mouse position
       Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+      mousePos = mousePos.normalized;
       float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-      //Debug.Log("Angle: " + angle);
       // Side
       if (Mathf.Abs(angle) <= 45 || Mathf.Abs(angle) >= 135) {
-         if(velocity.magnitude > 0.2f) {
-            anim.Play("run-side");
-         }
-         else {
-            anim.Play("idle-side");
-         }
          sr.flipX = Mathf.Abs(angle) >= 135;
          facing = sr.flipX ? Facing.LEFT : Facing.RIGHT;
       }
       // Back
       if(angle > 45 && angle < 135) {
-         if (velocity.magnitude > 0.2f) {
-            anim.Play("run-back");
-         }
-         else {
-            anim.Play("idle-back");
-         }
          facing = Facing.TOP;
       }
       // Front
       if(angle > -135 && angle < -45) {
-         if (velocity.magnitude > 0.2f) {
-            anim.Play("run-front");
-         }
-         else {
-            anim.Play("idle-front");
-         }
          facing = Facing.DOWN;
       }
+      anim.SetFloat("FaceX", mousePos.x);
+      anim.SetFloat("FaceY", mousePos.y);
+      anim.SetFloat("Magnitude", velocity.magnitude);
 
+      if(sr.flipX != oldFlipX) {
+         p.PV.RPC("RPC_SendActorFlipX", RpcTarget.Others,sr.flipX);
+         oldFlipX = sr.flipX;
+      }
 
 
       //velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * maxSpeed;
    }
 
-   void FixedUpdate() {
+   public virtual void FixedUpdateActor() {
       rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
       //rb.velocity = velocity;
-      //Vector3 position = transform.localPosition;
+   }
 
-      //position.x = (Mathf.Round(transform.parent.position.x * 16) / 16) - transform.parent.position.x;
-      //position.y = (Mathf.Round(transform.parent.position.y * 16) / 16) - transform.parent.position.y;
-
-      //transform.localPosition = position;
+   [PunRPC]
+   protected void RPC_SendActorFlipX(bool flip) {
+      sr.flipX = flip;
+      oldFlipX = flip;
    }
 
 

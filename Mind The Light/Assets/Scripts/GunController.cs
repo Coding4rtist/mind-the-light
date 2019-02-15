@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class GunController : MonoBehaviour {
+
+   private PhotonView PV;
 
    private Gun equippedGun;
 
@@ -21,22 +24,26 @@ public class GunController : MonoBehaviour {
    private float lastAngle = 0;
    private Vector2 handPos;
    
-   void Start() {
+   void Awake() {
       sr = gun.GetComponent<SpriteRenderer>();
       muzzlePoint = gun.GetComponentInChildren<Transform>();
 
+      PV = GetComponent<PhotonView>();
       equippedGun = GetComponentInChildren<Gun>();
 
       handPos = new Vector2(rightHandX, handY);
    }
 
   
-   void Update() {
+   private void Update() {
+      if(!PV.IsMine) {
+         return;
+      }
+
       Vector2 mousePos = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position + handPos;
       //Debug.DrawLine(mousePos, aimPoint);
       float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-      //float handX = 0;
-      //= (angle >= -90f && angle <= 90f) ? rightHandX : leftHandX;
+
       if(angle >= 0) {
          if (angle >= lastAngle) {
             // Senso antiorario
@@ -83,5 +90,9 @@ public class GunController : MonoBehaviour {
       if(Input.GetMouseButtonDown(0)) {
          equippedGun.Shoot();
       }
+
+
    }
+
+
 }

@@ -8,17 +8,45 @@ public class PhotonPlayer : MonoBehaviour {
 
    private PhotonView PV;
    public GameObject myChar;
+   public int teamID = -1;
 
-   void Start() {
+   void Awake() {
       PV = GetComponent<PhotonView>();
-      int rand = Random.Range(0, GameManager.Instance.spawnPoints.Length);
 
-      if(PV.IsMine) {
-         myChar = PhotonNetwork.Instantiate(Path.Combine(Consts.PHOTON_FOLDER, "Guard"), GameManager.Instance.spawnPoints[rand].position, Quaternion.identity, 0);
+      if (PV.IsMine) {
+         PV.RPC("RPC_GetTeam", RpcTarget.MasterClient); // Only the masterclient knows teams
+         
       }
    }
 
    void Update() {
+      if(myChar == null && teamID != -1) {
+         if(PV.IsMine) {
+            string prefabName = Path.Combine(Consts.PHOTON_FOLDER, Consts.CHARACTER_NAMES[teamID]);
+            Vector3 spawnPoint = Vector3.zero;
+            if(teamID == 0) {
+               int rand = Random.Range(0, GameManager.Instance.spawnPointsGuards.Length);
+               spawnPoint = GameManager.Instance.spawnPointsGuards[rand].position;
+            }
+            else {
+               int rand = Random.Range(0, GameManager.Instance.spawnPointsSpies.Length);
+               spawnPoint = GameManager.Instance.spawnPointsSpies[rand].position;
+            }
+            myChar = PhotonNetwork.Instantiate(prefabName, spawnPoint, Quaternion.identity, 0);
+            myChar.transform.SetParent(transform);
+         }
+      }
+   }
 
+   [PunRPC]
+   private void RPC_GetTeam() {
+      teamID = GameManager.Instance.nextPlayerTeam;
+      GameManager.Instance.UpdateTeam();
+      PV.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, teamID);
+   }
+
+   [PunRPC]
+   void RPC_SentTeam(int team) {
+      teamID = team;
    }
 }

@@ -31,5 +31,9 @@ MonoBehaviour:
   RpcList:
   - RPC_CreatePlayer
   - RPC_LoadedGame
+  - RPC_AddCharacter
+  - RPC_GetTeam
+  - RPC_SentTeam
+  - RPC_SendActorFlipX
   DisableAutoOpenWizard: 1
   ShowSettings: 0

@@ -6,7 +6,11 @@ public class GameManager : MonoBehaviour {
 
    public static GameManager Instance;
 
-   public Transform[] spawnPoints;
+   public int nextPlayerTeam;
+
+   //public GameObject[] allCharacters;
+   public Transform[] spawnPointsGuards;
+   public Transform[] spawnPointsSpies;
 
    private void Awake() {
       if (Instance == null) {
@@ -22,5 +26,9 @@ public class GameManager : MonoBehaviour {
 
    void Update() {
 
+   }
+
+   public void UpdateTeam() {
+      nextPlayerTeam = (nextPlayerTeam + 1) % 2; 
    }
 }

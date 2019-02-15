@@ -5,6 +5,7 @@ using UnityEngine;
 public static class Consts {
 
    public static string PHOTON_FOLDER = "PhotonPrefabs";
+   public static string[] CHARACTER_NAMES = { "Guard", "Spy" };
 
    public static bool DELAYED_START = true;
 

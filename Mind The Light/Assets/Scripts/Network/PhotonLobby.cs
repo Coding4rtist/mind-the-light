@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
 
@@ -11,7 +11,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
    public string roomName;
    public GameObject roomListingPrefab;
    public Transform roomsPanel;
-   public Text statusText;
+   public TextMeshProUGUI statusText;
+   public TextMeshProUGUI roomNameText;
 
    public List<RoomInfo> roomListings;
 
@@ -29,12 +30,16 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
       Debug.Log("Player has connected to the Photon master server");
       PhotonNetwork.AutomaticallySyncScene = true;
       PhotonNetwork.NickName = "Player " + Random.Range(0, 1000);
+
+      if (!PhotonNetwork.InLobby) {
+         PhotonNetwork.JoinLobby();
+      }
    }
 
    public override void OnRoomListUpdate(List<RoomInfo> roomList) {
       base.OnRoomListUpdate(roomList);
 
-      statusText.text = "Loading...";
+      statusText.text = "<style=\"C1\">Loading...</style>";
 
       //RemoveRoomListings();
       int tempIndex;
@@ -50,8 +55,10 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
             Destroy(roomsPanel.GetChild(tempIndex).gameObject);
          }
          else {
-            roomListings.Add(room);
-            ListRoom(room);
+            if(room.IsOpen && room.IsVisible) {
+               roomListings.Add(room);
+               ListRoom(room);
+            }
          }
       }
 
@@ -83,21 +90,26 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
    public void CreateRoom() {
       if(roomName == "" || roomName == null) {
          Debug.Log("Can't create a new room, name field is empty");
-         statusText.text = "Can't create a new room, name field is empty";
+         statusText.text = "<style=\"C2\">Can't create a new room, name field is empty</style>";
          return;
       }
       Debug.Log("Trying to create a new room");
       RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)Consts.GAME_SIZE };
       PhotonNetwork.CreateRoom(roomName, roomOps);
 
-      statusText.text = "Creating a new rooom...";
+      statusText.text = "<style=\"C1\">Creating a new rooom...</style>";
+      roomNameText.text = roomName;
    }
 
    public override void OnCreateRoomFailed(short returnCode, string message) {
       base.OnCreateRoomFailed(returnCode, message);
       Debug.Log("Tried to create a new room but failed, there must be already one room with the same name");
 
-      statusText.text = "Room creation failed.";
+      statusText.text = "<style=\"C2\">Room creation failed.</style>";
+   }
+
+   public void OnNicknameChanged(string name) {
+      PhotonNetwork.NickName = name;
    }
 
    public void OnRoomNameChanged(string name) {
@@ -109,5 +121,13 @@ public class PhotonLobby : MonoBehaviourPunCallbacks, ILobbyCallbacks {
       if(!PhotonNetwork.InLobby) {
          PhotonNetwork.JoinLobby();
       }
+   }
+
+
+   public void Disconnect() {
+      PhotonNetwork.LeaveRoom();
+      UIManager.Instance.ToMainMenu();
+      //RemoveRoomListings();
+      JoinLobbyOnClick();
    }
 }
