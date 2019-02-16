@@ -6,17 +6,10 @@ public class UIManager : MonoBehaviour {
 
    public static UIManager Instance;
 
-   [SerializeField]
-   private GameObject mainMenuScreen;
-
-   [SerializeField]
-   private GameObject roomScreen;
-
-   [SerializeField]
-   private GameObject gameScreen;
-
-   [SerializeField]
-   private GameObject pauseScreen;
+   public GameObject mainMenuScreen;
+   public GameObject roomScreen;
+   public GameObject gameScreen;
+   public GameObject pauseScreen;
 
    void Start() {
       if(Instance == null) {

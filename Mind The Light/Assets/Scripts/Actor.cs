@@ -4,21 +4,21 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Actor : MonoBehaviour {
+public abstract class Actor : MonoBehaviourPun, IPunObservable {
 
    //public string state;
 
-   private const float accel = 1.0f;
-   private const float fric = 2.0f;
-   public float maxSpeed = 6.5f;
+   private const float accel = 1.0f * 16;
+   private const float fric = 2.0f * 16;
+   private const float maxSpeed = 3.5f * 16;
 
    public Vector2 velocity;
    public Facing facing;
    private bool oldFlipX;
 
-   public Vector3 movDir = Vector3.zero;
-   public float moveForce = 100f;
-   private float dirVel;
+   //public Vector3 movDir = Vector3.zero;
+   //public float moveForce = 100f;
+   //private float dirVel;
    public bool slowdown;
    public float bushSlowdown;
 
@@ -27,13 +27,19 @@ public abstract class Actor : MonoBehaviour {
    private Rigidbody2D rb;
    protected SpriteRenderer sr;
 
+   private Vector2 _networkPosition;
+
    protected void Awake() {
       anim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody2D>();
       sr = GetComponent<SpriteRenderer>();
    }
 
-   public virtual void UpdateActor() {
+   private void Update() {
+      if (!p.PV.IsMine) {
+         return;
+      }
+
       // Left
       if (p.input.kLeft && !p.input.kRight) {
          if (velocity.x > 0)
@@ -105,7 +111,11 @@ public abstract class Actor : MonoBehaviour {
       //velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * maxSpeed;
    }
 
-   public virtual void FixedUpdateActor() {
+   private void FixedUpdate() {
+      if(!p.PV.IsMine) {
+         rb.position = Vector2.MoveTowards(rb.position, _networkPosition, Time.fixedDeltaTime);
+         return;
+      }
       rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
       //rb.velocity = velocity;
    }
@@ -122,5 +132,18 @@ public abstract class Actor : MonoBehaviour {
          return Mathf.Min(start + shift, end);
       else
          return Mathf.Max(start - shift, end);
+   }
+
+   public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+      if(stream.IsWriting) {
+         stream.SendNext(rb.position);
+         stream.SendNext(velocity);
+      }
+      else {
+         _networkPosition = (Vector2)stream.ReceiveNext();
+         rb.velocity = (Vector2)stream.ReceiveNext();
+         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
+         _networkPosition += (rb.velocity * lag);
+      }
    }
 }

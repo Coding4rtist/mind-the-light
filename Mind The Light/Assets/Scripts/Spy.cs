@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Spy : Actor {
 
@@ -27,29 +28,12 @@ public class Spy : Actor {
       Setup();
    }
 
-   public override void UpdateActor() {
-      base.UpdateActor();
-   }
-
-   public override void FixedUpdateActor() {
-      base.FixedUpdateActor();
-   }
-
-   public void TakeDamage(float amount) {
+   public void OnSpyHit(float damage) {
       if (isDead)
          return;
 
-      curHealth -= amount;
-      Debug.Log(transform.name + " now has " + curHealth + "hp.");
-
-      if (curHealth <= 0) {
-         Die();
-      }
-      else {
-         if(!isFlashing) {
-            StartCoroutine(HitFlashAnim());
-         }
-      }
+      if(PhotonNetwork.IsMasterClient)
+         p.PV.RPC("RPC_OnSpyHit", RpcTarget.All, damage);
    }
 
    private void Die() {
@@ -87,4 +71,18 @@ public class Spy : Actor {
    }
 
 
+   [PunRPC]
+   private void RPC_OnSpyHit(float damage) {
+      curHealth -= damage;
+      Debug.Log(transform.name + " now has " + curHealth + "hp.");
+
+      if (curHealth <= 0) {
+         Die();
+      }
+      else {
+         if (!isFlashing) {
+            StartCoroutine(HitFlashAnim());
+         }
+      }
+   }
 }

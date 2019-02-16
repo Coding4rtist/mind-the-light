@@ -10,8 +10,11 @@ public class Player : MonoBehaviour {
    [HideInInspector]
    public PlayerInput input;
 
+   public GameObject cameraPrefab;
+
    private PlayerCamera myCamera;
 
+   [HideInInspector]
    public PhotonView PV;
 
    void Start() {
@@ -20,17 +23,5 @@ public class Player : MonoBehaviour {
 
       actor = GetComponent<Actor>();
       actor.p = this;
-   }
-
-   private void Update() {
-      if(PV.IsMine) {
-         actor.UpdateActor();
-      }
-   }
-
-   private void FixedUpdate() {
-      if(PV.IsMine) {
-         actor.FixedUpdateActor();
-      }
    }
 }

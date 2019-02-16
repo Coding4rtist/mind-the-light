@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Projectile : MonoBehaviour {
+public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
 
    public LayerMask collisionMask;
 
@@ -12,15 +13,27 @@ public class Projectile : MonoBehaviour {
 
    private Vector2 lastPos;
 
+   private PhotonView PV;
+   //private Vector2 _networkPosition;
+
+   public void SetupDelay(float delay) {
+      transform.Translate(Vector2.up * speed * (delay / 1000));
+   }
+
    public void SetSpeed(float newSpeed) {
       speed = newSpeed;
    }
 
-   void Start() {
-
+   void Awake() {
+      PV = GetComponent<PhotonView>();
    }
 
    void Update() {
+      //if (!PV.IsMine) {
+      //   transform.position = _networkPosition;
+      //   transform.Translate(Vector2.up * speed * Time.deltaTime);
+      //}
+
       float moveDistance = speed * Time.deltaTime;
       CheckCollisions(moveDistance);
       transform.Translate(Vector2.up * moveDistance);
@@ -41,9 +54,10 @@ public class Projectile : MonoBehaviour {
       //Destroy(hit.transform.gameObject);
       // GUn hand controller
 
-      if(hit.collider.tag == "Player") { // TODO DA CAMBIARE IN THIEF
-         Spy thief = hit.transform.GetComponent<Spy>();
-         thief.TakeDamage(10);
+      if(hit.collider.tag == "Spy") {
+         Spy spy = hit.transform.GetComponent<Spy>();
+         spy.OnSpyHit(10);
+         Destroy(gameObject);
       }
 
 
@@ -56,4 +70,16 @@ public class Projectile : MonoBehaviour {
 
       }
    }
+
+   //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+   //   if (stream.IsWriting) {
+   //      stream.SendNext((Vector2)transform.position);
+   //   }
+   //   else {
+   //      _networkPosition = (Vector2)stream.ReceiveNext();
+
+   //      float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
+   //      _networkPosition += Vector2.up * (speed * lag);
+   //   }
+   //}
 }

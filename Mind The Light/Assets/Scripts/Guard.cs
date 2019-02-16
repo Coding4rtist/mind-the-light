@@ -12,12 +12,4 @@ public class Guard : Actor {
       gunController = GetComponent<GunController>();
    }
 
-   public override void UpdateActor() {
-      base.UpdateActor();
-   }
-
-   public override void FixedUpdateActor() {
-      base.FixedUpdateActor();
-   }
-
 }

@@ -35,5 +35,9 @@ MonoBehaviour:
   - RPC_GetTeam
   - RPC_SentTeam
   - RPC_SendActorFlipX
+  - RPC_SendGunFlipY
+  - RPC_StartCountdown
+  - RPC_Shoot
+  - RPC_OnSpyHit
   DisableAutoOpenWizard: 1
   ShowSettings: 0

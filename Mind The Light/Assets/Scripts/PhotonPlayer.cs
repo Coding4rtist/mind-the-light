@@ -34,6 +34,8 @@ public class PhotonPlayer : MonoBehaviour {
             }
             myChar = PhotonNetwork.Instantiate(prefabName, spawnPoint, Quaternion.identity, 0);
             myChar.transform.SetParent(transform);
+
+            //Camera.main.transform.parent.GetComponent<PlayerCamera>().target = myChar.transform;
          }
       }
    }
