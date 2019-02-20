@@ -39,5 +39,9 @@ MonoBehaviour:
   - RPC_StartCountdown
   - RPC_Shoot
   - RPC_OnSpyHit
+  - RPC_SetNickname
+  - RPC_Welcome
+  - RPC_OnHitObject
+  - RPC_Reload
   DisableAutoOpenWizard: 1
   ShowSettings: 0

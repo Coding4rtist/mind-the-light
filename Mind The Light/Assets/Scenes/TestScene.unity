@@ -450,10 +450,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 123, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
-      propertyPath: m_Name
-      value: Guard
-      objectReference: {fileID: 0}
     - target: {fileID: 133, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -498,8 +494,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 147, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 123, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
+      propertyPath: m_Name
+      value: Guard
+      objectReference: {fileID: 0}
     - target: {fileID: 178, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
       propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 118, guid: 6f5ca2ab19c9c9e418343d3ed9c99f02, type: 3}
+      propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -643,7 +651,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3f2da2005915ea418bff0a209fb715e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updateInterval: 0.5
 --- !u!132 &927533789
 GUIText:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Photon.Pun;
+
 
 public class GunController : MonoBehaviourPun, IPunObservable {
 
@@ -57,6 +59,7 @@ public class GunController : MonoBehaviourPun, IPunObservable {
       Vector2 delta = mousePos - barrelPosition;
       
       gunAngle = Mathf.Atan2(delta.y, delta.x) * 57.29578f;
+      gun.aimAngle = gunAngle;
 
       if (gunAngle >= 0) {
          if (gunAngle >= lastAngle) {
@@ -104,24 +107,31 @@ public class GunController : MonoBehaviourPun, IPunObservable {
       gun.transform.localRotation = Quaternion.Euler(0, 0, gunAngle);
       lastAngle = gunAngle;
 
-      if (Input.GetMouseButtonDown(0)) {
+      if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
          var ping = PhotonNetwork.GetPing();
-         PV.RPC("RPC_Shoot", RpcTarget.Others, ping);
-         gun.Shoot(0);
+         AttackResult result = gun.Shoot(0);
+         if(result == AttackResult.Success || result == AttackResult.Reload) {
+            PV.RPC("RPC_Shoot", RpcTarget.Others, ping);
+            if(result == AttackResult.Success) {
+               gun.DoScreenShake();
+            }
+         }
+            
       }
-   }
 
-   void OnDrawGizmos() {
-      // Draw a yellow sphere at the transform's position
-      Gizmos.color = Color.red;
-      Gizmos.DrawSphere(new Vector3(leftHandX, handY), 1);
-      Gizmos.DrawSphere(new Vector3(rightHandX, handY), 1);
+      if(Input.GetKeyDown(KeyCode.R)) {
+         bool success = gun.Reload();
+         if (success)
+            PV.RPC("RPC_Reload", RpcTarget.Others);
+      }
+
    }
 
    [PunRPC]
    protected void RPC_SendGunFlipY(bool flip) {
       sr.flipY = flip;
       oldFlipY = flip;
+      muzzlePoint.GetChild(0).localPosition = flip ? new Vector2(0.7f * 16, -0.34f * 16) : new Vector2(0.7f * 16, 0.4f * 16);
    }
 
    [PunRPC]
@@ -129,6 +139,11 @@ public class GunController : MonoBehaviourPun, IPunObservable {
       var ping = PhotonNetwork.GetPing();
       var delay = (float)(ping / 2 + remotePing / 2);
       gun.Shoot(delay);
+   }
+
+   [PunRPC]
+   protected void RPC_Reload() {
+      gun.Reload();
    }
 
    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
@@ -139,7 +154,9 @@ public class GunController : MonoBehaviourPun, IPunObservable {
       else {
          float handX = ((bool)stream.ReceiveNext()) ? leftHandX : rightHandX;
          gun.transform.localPosition = new Vector2(handX, handY);
-         _networkRotation = Quaternion.Euler(0, 0, (float)stream.ReceiveNext());
+         float angle = (float)stream.ReceiveNext();
+         _networkRotation = Quaternion.Euler(0, 0, angle);
+         gun.aimAngle = angle;
       }
    }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6986413041728975467}
   m_Layer: 0
   m_Name: wall-projectile-smoke
-  m_TagString: Untagged
+  m_TagString: Wall-Proj-Smoke
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -7,24 +7,20 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
 
    public LayerMask collisionMask;
 
-   private float speed = 10f;
+   private float damage;
 
    public GameObject particlePrefab;
 
    private Vector2 lastPos;
 
    private PhotonView PV;
-   //private Vector2 _networkPosition;
+   private Rigidbody2D rb;
 
-   public void SetupDelay(float delay) {
-      transform.Translate(Vector2.up * speed * (delay / 1000));
-   }
+   public Actor shooter;
 
-   public void SetSpeed(float newSpeed) {
-      speed = newSpeed;
-   }
 
    void Awake() {
+      rb = GetComponent<Rigidbody2D>();
       PV = GetComponent<PhotonView>();
    }
 
@@ -34,14 +30,15 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
       //   transform.Translate(Vector2.up * speed * Time.deltaTime);
       //}
 
-      float moveDistance = speed * Time.deltaTime;
+      float moveDistance = 20f * Time.deltaTime;
       CheckCollisions(moveDistance);
-      transform.Translate(Vector2.up * moveDistance);
+      //transform.Translate(Vector2.up * moveDistance);
    }
 
    void CheckCollisions(float moveDistance) {
-      Ray2D ray = new Ray2D(transform.position, transform.up);
-      RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, moveDistance, collisionMask);
+      //Ray2D ray = new Ray2D(transform.position, rb.velocity);
+      RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, moveDistance, collisionMask);
+      Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance, Color.red);
 
       if (hit) {
          OnHitObject(hit);
@@ -50,25 +47,33 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
 
    void OnHitObject(RaycastHit2D hit) {
       Debug.Log("Projectile hit: " + hit.transform.name);
-      Destroy(gameObject);
-      //Destroy(hit.transform.gameObject);
-      // GUn hand controller
 
       if(hit.collider.tag == "Spy") {
          Spy spy = hit.transform.GetComponent<Spy>();
-         spy.OnSpyHit(10);
-         Destroy(gameObject);
+         spy.OnSpyHit(shooter, 10);
+         //Destroy(gameObject);
+         
       }
 
 
       // Particles
       Vector2 direction = hit.transform.TransformDirection(hit.normal);
       if(direction.y <= 0) {
-         GameObject particleGO = Instantiate(particlePrefab, hit.point, Quaternion.identity);
+         //GameObject particleGO = Instantiate(particlePrefab, hit.point, Quaternion.identity);
+         GameObject particleGO = PoolManager.Instance.GetPooledObject("Wall-Proj-Smoke", hit.point, Quaternion.identity);
          Particle particle = particleGO.GetComponent<Particle>();
          particle.Play("wall-projectile-hit", direction);
 
       }
+
+      gameObject.SetActive(false);
+   }
+
+   public void Setup(Actor _shooter, Vector2 _velocity, float _delay, float _damage) {
+      shooter = _shooter;
+      rb.velocity = _velocity;
+      transform.Translate(rb.velocity * (_delay / 1000));
+      damage = _damage;
    }
 
    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {

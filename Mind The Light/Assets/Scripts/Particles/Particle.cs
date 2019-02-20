@@ -29,6 +29,5 @@ public class Particle : MonoBehaviour {
       anim.Play(animation);
       yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
       gameObject.SetActive(false);
-      Destroy(gameObject);
    }
 }

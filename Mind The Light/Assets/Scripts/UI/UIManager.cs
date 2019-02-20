@@ -6,9 +6,13 @@ public class UIManager : MonoBehaviour {
 
    public static UIManager Instance;
 
-   public GameObject mainMenuScreen;
+   [Header("Main Menu UI")]
+   public GameObject mainMenuUI;
+   public GameObject loginScreen;
+   public GameObject lobbyScreen;
    public GameObject roomScreen;
-   public GameObject gameScreen;
+   [Header("Game UI")]
+   public GameObject gameUI;
    public GameObject pauseScreen;
 
    void Start() {
@@ -19,32 +23,20 @@ public class UIManager : MonoBehaviour {
 
    #region Transictions
 
-   public void ToMainMenu() {
-      roomScreen.SetActive(false);
-      gameScreen.SetActive(false);
-      pauseScreen.SetActive(false);
-      mainMenuScreen.SetActive(true);
+   public void ToMainMenu(int screen) {
+      loginScreen.SetActive(screen == 0);
+      lobbyScreen.SetActive(screen == 1);
+      roomScreen.SetActive(screen == 2);
+
+      gameUI.SetActive(false);
+      mainMenuUI.SetActive(true);
    }
 
-   public void ToRoomScreen() {
-      mainMenuScreen.SetActive(false);
-      gameScreen.SetActive(false);
-      pauseScreen.SetActive(false);
-      roomScreen.SetActive(true);
-   }
+   public void ToGame(bool pause) {
+      pauseScreen.SetActive(pause);
 
-   public void ToPause() {
-      mainMenuScreen.SetActive(false);
-      roomScreen.SetActive(false);
-      gameScreen.SetActive(false);
-      pauseScreen.SetActive(true);
-   }
-
-   public void ToGame() {
-      mainMenuScreen.SetActive(false);
-      roomScreen.SetActive(false);
-      pauseScreen.SetActive(true);
-      gameScreen.SetActive(true);
+      mainMenuUI.SetActive(false);
+      gameUI.SetActive(true);
    }
 
    #endregion

@@ -3,44 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FPSDisplay : MonoBehaviour {
-   public float updateInterval = 0.5F;
-
-   private float accum = 0; // FPS accumulated over the interval
-   private int frames = 0; // Frames drawn over the interval
-   private float timeleft; // Left time for current interval
-
-   void Start() {
-      if (!GetComponent<GUIText>()) {
-         Debug.Log("UtilityFramesPerSecond needs a GUIText component!");
-         enabled = false;
-         return;
-      }
-      timeleft = updateInterval;
-   }
+   float deltaTime = 0.0f;
 
    void Update() {
-      timeleft -= Time.deltaTime;
-      accum += Time.timeScale / Time.deltaTime;
-      ++frames;
+      deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
+   }
 
-      // Interval ended - update GUI text and start new interval
-      if (timeleft <= 0.0) {
-         // display two fractional digits (f2 format)
-         float fps = accum / frames;
-         string format = System.String.Format("{0:F2} FPS", fps);
-         GetComponent<GUIText>().text = format;
+   void OnGUI() {
+      int w = Screen.width, h = Screen.height;
 
-         if (fps < 30)
-            GetComponent<GUIText>().material.color = Color.yellow;
-         else
-            if (fps < 10)
-            GetComponent<GUIText>().material.color = Color.red;
-         else
-            GetComponent<GUIText>().material.color = Color.green;
-         //	DebugConsole.Log(format,level);
-         timeleft = updateInterval;
-         accum = 0.0F;
-         frames = 0;
-      }
+      GUIStyle style = new GUIStyle();
+
+      Rect rect = new Rect(0, 0, w, h * 2 / 100);
+      style.alignment = TextAnchor.UpperLeft;
+      style.fontSize = h * 2 / 100;
+      style.normal.textColor = new Color(1f, 0.0f, 1f, 1.0f);
+      float msec = deltaTime * 1000.0f;
+      float fps = 1.0f / deltaTime;
+      string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
+      GUI.Label(rect, text, style);
    }
 }

@@ -28,18 +28,19 @@ public class Spy : Actor {
       Setup();
    }
 
-   public void OnSpyHit(float damage) {
+   public void OnSpyHit(Actor damager, float damage) {
       if (isDead)
          return;
 
-      if(PhotonNetwork.IsMasterClient)
-         p.PV.RPC("RPC_OnSpyHit", RpcTarget.All, damage);
+      if (PhotonNetwork.IsMasterClient)
+         p.PV.RPC("RPC_OnSpyHit", RpcTarget.All, damager.p.NickName, damage);
    }
 
-   private void Die() {
+   private void Die(string killerName) {
       isDead = true;
       // Disable components
       Debug.Log(transform.name + " is dead.");
+      Server.Death(killerName, p.NickName);
 
       StartCoroutine(Respawn());
    }
@@ -72,12 +73,15 @@ public class Spy : Actor {
 
 
    [PunRPC]
-   private void RPC_OnSpyHit(float damage) {
+   private void RPC_OnSpyHit(string damagerName, float damage) {
+      if (isDead)
+         return;
+
       curHealth -= damage;
       Debug.Log(transform.name + " now has " + curHealth + "hp.");
 
       if (curHealth <= 0) {
-         Die();
+         Die(damagerName);
       }
       else {
          if (!isFlashing) {

@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Guard
   - Spy
+  - Projectile
+  - Shot-Flash
+  - Wall-Proj-Smoke
+  - Walk-Puff
   layers:
   - Default
   - TransparentFX

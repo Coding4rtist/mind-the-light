@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5373640793924948395}
   m_Layer: 0
   m_Name: shot-flash
-  m_TagString: Untagged
+  m_TagString: Shot-Flash
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

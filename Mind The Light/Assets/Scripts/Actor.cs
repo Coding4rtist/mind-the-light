@@ -26,16 +26,37 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
    private Animator anim;
    private Rigidbody2D rb;
    protected SpriteRenderer sr;
+   protected AudioSource audioS;
 
    private Vector2 _networkPosition;
+
+   private bool doDustUps = true;
+   private float dustUpInterval = 0.4f;
+   private float dustUpTimer;
+   public AudioClip[] stepSounds;
+   private int stepSoundIndex = 0;
 
    protected void Awake() {
       anim = GetComponent<Animator>();
       rb = GetComponent<Rigidbody2D>();
       sr = GetComponent<SpriteRenderer>();
+      audioS = GetComponent<AudioSource>();
    }
 
    private void Update() {
+      // Dust Particles
+      if (doDustUps && velocity.magnitude > 0f) {
+         dustUpTimer += Time.deltaTime;
+         if (dustUpTimer >= dustUpInterval) {
+            GameObject dustGO = PoolManager.Instance.GetPooledObject("Walk-Puff", transform.position, transform.rotation);
+            Particle dust = dustGO.GetComponent<Particle>();
+            dust.Play("walk-puff");
+            dustUpTimer = 0f;
+            audioS.PlayOneShot(stepSounds[stepSoundIndex]);
+            stepSoundIndex = (stepSoundIndex + 1) % stepSounds.Length;
+         }
+      }
+
       if (!p.PV.IsMine) {
          return;
       }
@@ -107,7 +128,6 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
          oldFlipX = sr.flipX;
       }
 
-
       //velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * maxSpeed;
    }
 
@@ -142,8 +162,9 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
       else {
          _networkPosition = (Vector2)stream.ReceiveNext();
          rb.velocity = (Vector2)stream.ReceiveNext();
+         velocity = rb.velocity;
          float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
-         _networkPosition += (rb.velocity * lag);
+         _networkPosition += (velocity * lag);
       }
    }
 }
