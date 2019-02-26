@@ -19,12 +19,39 @@ public class Player : MonoBehaviour {
    [HideInInspector]
    public PhotonView PV;
 
+   public LayerMask interactiveObjectsMask;
+   public LayerMask obstacleMask;
+   public List<InteractiveObject> interactiveObjects = new List<InteractiveObject>();
+
    void Start() {
       PV = GetComponent<PhotonView>();
       input = GetComponent<PlayerInput>();
 
       actor = GetComponent<Actor>();
       actor.p = this;
+   }
+
+   private void OnTriggerEnter2D(Collider2D other) {
+      Debug.Log(other.name + " " + other.gameObject.layer + "|" + interactiveObjectsMask.value);
+      if(((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
+         Debug.Log("è interattivo");
+         Transform target = other.transform;
+         InteractiveObject interactive = target.GetComponent<InteractiveObject>();
+         interactive.OnEnteredRange(this);
+         interactiveObjects.Add(interactive);
+      }
+   }
+
+   private void OnTriggerExit2D(Collider2D other) {
+      if (((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
+         InteractiveObject interactive = other.GetComponent<InteractiveObject>();
+         interactive.OnExitRange(this);
+         interactiveObjects.Remove(interactive);
+      }
+   }
+
+   private void Update() {
+      
    }
 
    public void SetCamera(PlayerCamera _camera) {

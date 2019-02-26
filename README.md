@@ -1,5 +1,5 @@
 ﻿# mind-the-light
-Mind the light is a multiplayer 3D game made in Unity.
+Mind the light is a multiplayer 2D game made in Unity.
 
 
 ### The (Intended) Schedule

@@ -282,6 +282,13 @@ MonoBehaviour:
   input: {fileID: 0}
   myCamera: {fileID: 0}
   PV: {fileID: 0}
+  interactiveObjectsMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 512
+  interactiveObjects: []
 --- !u!114 &152
 MonoBehaviour:
   m_ObjectHideFlags: 0
