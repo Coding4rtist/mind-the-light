@@ -24,8 +24,10 @@ public class PlayerCamera : MonoBehaviour {
 
       Vector3 desiredPosition = transform.position = target.position + offset;
       Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+      if(System.Math.Round(smoothedPosition.y - Mathf.FloorToInt(smoothedPosition.y), 1) == 0.5f) {
+         smoothedPosition.y += 0.01f;
+      }
       transform.position = smoothedPosition;
-      //transform.LookAt(target);
    }
 
    public void DoGunScreenShake(ShakeSettings settings) {

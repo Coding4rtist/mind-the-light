@@ -143,7 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 2560
   particlePrefab: {fileID: 8832113729350675918, guid: 32f09c721dee0304f992be468a75dc8c,
     type: 3}
   shooter: {fileID: 0}

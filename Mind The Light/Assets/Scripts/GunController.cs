@@ -12,8 +12,8 @@ public class GunController : MonoBehaviourPun, IPunObservable {
    public GameObject gunGO;
    private Gun gun;
 
-   
-   //public Transform barrelOffset;
+
+   public Transform fovTransform;
    private Transform muzzlePoint;
    private BoxCollider2D hitbox;
    private SpriteRenderer sr;
@@ -29,6 +29,8 @@ public class GunController : MonoBehaviourPun, IPunObservable {
    private float lastAngle = 0;
    private Vector2 handPos;
    private bool oldFlipY;
+
+   private Vector2 fovDir;
 
    private Quaternion _networkRotation= Quaternion.identity;
 
@@ -47,22 +49,24 @@ public class GunController : MonoBehaviourPun, IPunObservable {
    private void Update() {
       if (!PV.IsMine) {
          gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, _networkRotation, Time.deltaTime * 300f);
+         fovTransform.right = fovDir;
          return;
       }
 
       Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-      Vector2 barrelPosition = gun.muzzleTransform.position;
 
-      float dist = Vector2.Distance(mousePos, barrelPosition);
-      float distClamped = Mathf.Clamp01((dist - 2f * 10) / 3f);
-      barrelPosition = Vector2.Lerp(hitbox.bounds.center, barrelPosition, distClamped);
-      Vector2 delta = mousePos - barrelPosition;
-      
-      gunAngle = Mathf.Atan2(delta.y, delta.x) * 57.29578f;
+      gunAngle = HandleAimRotation(mousePos);
       gun.aimAngle = gunAngle;
 
+      gun.transform.localPosition = handPos;
+      gun.transform.localRotation = Quaternion.Lerp(gun.transform.localRotation, Quaternion.Euler(0f, 0f, gunAngle), Time.deltaTime * 32f);
+
+      fovDir = mousePos - (Vector2)transform.position;
+      fovTransform.right = fovDir;
+
+
       if (gunAngle >= 0) {
-         if (gunAngle >= lastAngle) {
+         if (gunAngle > lastAngle) {
             // Senso antiorario
             if (gunAngle > 90 + rotationOffset) {
                handPos.x = leftHandX;
@@ -70,7 +74,7 @@ public class GunController : MonoBehaviourPun, IPunObservable {
                muzzlePoint.GetChild(0).localPosition = new Vector2(0.7f * 16, -0.34f * 16);
             }
          }
-         else {
+         else if (gunAngle < lastAngle) {
             // Senso orario
             if (gunAngle < 90 - rotationOffset) {
                handPos.x = rightHandX;
@@ -80,16 +84,18 @@ public class GunController : MonoBehaviourPun, IPunObservable {
          }
       }
       else {
-         if (gunAngle <= lastAngle) {
+         if (gunAngle < lastAngle) {
             // Senso orario
+            lastAngle = gunAngle;
             if (gunAngle <= -90 - rotationOffset) {
                handPos.x = leftHandX;
                sr.flipY = true;
                muzzlePoint.GetChild(0).localPosition = new Vector2(0.7f * 16, -0.34f * 16);
             }
          }
-         else {
+         else if (gunAngle > lastAngle) {
             // Senso antiorario
+            lastAngle = gunAngle;
             if (gunAngle > -90 + rotationOffset) {
                handPos.x = rightHandX;
                sr.flipY = false;
@@ -97,24 +103,22 @@ public class GunController : MonoBehaviourPun, IPunObservable {
             }
          }
       }
+      
+      
 
       if (sr.flipY != oldFlipY) {
          PV.RPC("RPC_SendGunFlipY", RpcTarget.Others, sr.flipY);
          oldFlipY = sr.flipY;
       }
 
-      gun.transform.localPosition = handPos;
-      gun.transform.localRotation = Quaternion.Euler(0, 0, gunAngle);
-      lastAngle = gunAngle;
-
       if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject()) {
          var ping = PhotonNetwork.GetPing();
          AttackResult result = gun.Shoot(0);
          if(result == AttackResult.Success || result == AttackResult.Reload) {
             PV.RPC("RPC_Shoot", RpcTarget.Others, ping);
-            if(result == AttackResult.Success) {
-               gun.DoScreenShake();
-            }
+            //if(result == AttackResult.Success) {
+            //   gun.DoScreenShake();
+            //}
          }
             
       }
@@ -125,6 +129,7 @@ public class GunController : MonoBehaviourPun, IPunObservable {
             PV.RPC("RPC_Reload", RpcTarget.Others);
       }
 
+      lastAngle = gunAngle;
    }
 
    [PunRPC]
@@ -150,6 +155,7 @@ public class GunController : MonoBehaviourPun, IPunObservable {
       if (stream.IsWriting) {
          stream.SendNext(sr.flipY);
          stream.SendNext(gunAngle);
+         stream.SendNext(fovDir);
       }
       else {
          float handX = ((bool)stream.ReceiveNext()) ? leftHandX : rightHandX;
@@ -157,7 +163,20 @@ public class GunController : MonoBehaviourPun, IPunObservable {
          float angle = (float)stream.ReceiveNext();
          _networkRotation = Quaternion.Euler(0, 0, angle);
          gun.aimAngle = angle;
+         fovDir = (Vector2)stream.ReceiveNext();
       }
+   }
+
+   private float HandleAimRotation(Vector2 aimPoint) {
+      Vector2 center = hitbox.bounds.center;
+      float dist = Vector2.Distance(aimPoint, center);
+      float clampedDist = Mathf.Clamp01((dist - 8f) / 16f);
+      Vector2 val = Vector2.Lerp(center, gun.muzzleTransform.position, clampedDist);
+      //Debug.DrawLine(val - Vector2.up * 3f, val + Vector2.up * 3f);
+      //Debug.DrawLine(val - Vector2.right * 3f, val + Vector2.right * 3f);
+      Vector2 delta = aimPoint - val;
+      //Debug.DrawLine(aimPoint, val, Color.red);
+      return Mathf.Atan2(delta.y, delta.x) * 57.29578f;
    }
 
 }

@@ -118,7 +118,7 @@ public class Gun : MonoBehaviour {
    }
 
    public bool Reload() {
-      if(currentAmmoInMag == maxAmmoPerMag) {
+      if(currentAmmoInMag == maxAmmoPerMag || isReloading) {
          return false;
       }
 

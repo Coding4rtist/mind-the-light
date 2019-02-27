@@ -28,7 +28,7 @@ public class FOV : MonoBehaviour {
       mesh.name = "View Mesh";
       viewMeshFilter.mesh = mesh;
 
-      StartCoroutine("FindTargetsWithDelay", .2f);
+      //StartCoroutine("FindTargetsWithDelay", .2f); // DEBUG
    }
 
    IEnumerator FindTargetsWithDelay(float delay) {

@@ -51,7 +51,11 @@ public class Player : MonoBehaviour {
    }
 
    private void Update() {
-      
+      if(Input.GetKeyDown(KeyCode.E)) {
+         foreach(InteractiveObject obj in interactiveObjects) {
+            obj.Interact(this);
+         }
+      }
    }
 
    public void SetCamera(PlayerCamera _camera) {

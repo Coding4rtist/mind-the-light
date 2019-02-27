@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
       PV = GetComponent<PhotonView>();
    }
 
-   void Update() {
+   void FixedUpdate() {
       //if (!PV.IsMine) {
       //   transform.position = _networkPosition;
       //   transform.Translate(Vector2.up * speed * Time.deltaTime);
@@ -46,6 +46,10 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
    }
 
    void OnHitObject(RaycastHit2D hit) {
+      if(hit.collider.tag == "Guard") {
+         return;
+      }
+
       Debug.Log("Projectile hit: " + hit.transform.name);
 
       if(hit.collider.tag == "Spy") {
@@ -58,7 +62,7 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
 
       // Particles
       Vector2 direction = hit.transform.TransformDirection(hit.normal);
-      if(direction.y <= 0) {
+      if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Collidable") && direction.y <= 0) {
          //GameObject particleGO = Instantiate(particlePrefab, hit.point, Quaternion.identity);
          GameObject particleGO = PoolManager.Instance.GetPooledObject("Wall-Proj-Smoke", hit.point, Quaternion.identity);
          Particle particle = particleGO.GetComponent<Particle>();

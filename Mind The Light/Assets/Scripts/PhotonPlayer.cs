@@ -38,7 +38,7 @@ public class PhotonPlayer : MonoBehaviour {
             player.TeamID = teamID;
             PlayerCamera pCamera = Camera.main.transform.parent.GetComponent<PlayerCamera>();
             player.SetCamera(pCamera);
-            //pCamera.target = myChar.transform;
+            pCamera.target = myChar.transform; // DEBUG
          }
       }
    }

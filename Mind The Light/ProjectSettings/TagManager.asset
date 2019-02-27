@@ -22,7 +22,7 @@ TagManager:
   - VirtualScreen
   - Collidable
   - InteractiveObject
-  - 
+  - Entity
   - 
   - 
   - 
