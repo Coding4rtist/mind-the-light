@@ -9,13 +9,18 @@ public class Door : InteractiveObject {
    public bool IsOpen = false;
    public bool IsLocked = false;
 
+   private SpriteRenderer sr;
    private Animator anim;
    private AudioSource audioS;
    private GameObject closedColliderGO;
 
+   private Color outlineColor = Color.white;
+   private Color transparentColor = new Color(0f, 0f, 0f, 0f);
+
    private void Awake() {
       closedColliderGO = transform.GetChild(0).gameObject;
 
+      sr = GetComponent<SpriteRenderer>();
       anim = GetComponent<Animator>();
       audioS = GetComponent<AudioSource>();
 
@@ -26,11 +31,13 @@ public class Door : InteractiveObject {
    public override void OnEnteredRange(Player interactor) {
       // enable outline
       Debug.Log("DOOR ENTERED RANGE");
+      sr.material.SetColor("_Color", outlineColor);
    }
 
    public override void OnExitRange(Player interactor) {
       // disable outline
       Debug.Log("DOOR EXIT RANGE");
+      sr.material.SetColor("_Color", transparentColor);
    }
 
    public override void Interact(Player interactor) {
