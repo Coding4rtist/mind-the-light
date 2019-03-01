@@ -163,7 +163,7 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
          _networkPosition = (Vector2)stream.ReceiveNext();
          rb.velocity = (Vector2)stream.ReceiveNext();
          velocity = rb.velocity;
-         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
+         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTimestamp));
          _networkPosition += (velocity * lag);
       }
    }

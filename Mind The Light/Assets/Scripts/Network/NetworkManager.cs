@@ -165,7 +165,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
       UIManager.Instance.ToMainMenu(2);
       SetRoomDefaults();
-      startButton.SetActive(PhotonNetwork.IsMasterClient);
+      startButton.SetActive(PhotonNetwork.IsMasterClient && Consts.GAME_SIZE > 2);
 
       ClearPlayerListings();
       ListPlayers();
@@ -221,7 +221,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
          ClearPlayerListings();
          ListPlayers();
 
-         startButton.SetActive(PhotonNetwork.IsMasterClient);
+         startButton.SetActive(PhotonNetwork.IsMasterClient && Consts.GAME_SIZE > 2);
 
          if (playersInRoom == 1) {
             SetRoomDefaults();
@@ -263,6 +263,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       isGameLoaded = true;
 
       if (PhotonNetwork.IsMasterClient) {
+         GameManager.Instance.SpawnActors();
          return;
       }
 
@@ -283,7 +284,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
    [PunRPC]
    private void RPC_CreatePlayer() {
-      UIManager.Instance.ToGame(false);
       isGameStarted = true;
       PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "NetworkPlayer"), transform.position, Quaternion.identity, 0);
    }

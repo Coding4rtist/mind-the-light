@@ -43,5 +43,8 @@ MonoBehaviour:
   - RPC_Welcome
   - RPC_OnHitObject
   - RPC_Reload
+  - RPC_EndRound
+  - RPC_StartRound
+  - RPC_ReadyRound
   DisableAutoOpenWizard: 1
   ShowSettings: 0
