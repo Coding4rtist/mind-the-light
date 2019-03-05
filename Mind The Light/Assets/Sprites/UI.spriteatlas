@@ -41,31 +41,40 @@ SpriteAtlas:
       enableTightPacking: 1
     variantMultiplier: 1
     packables:
-    - {fileID: 2800000, guid: b5069c5df46f18e48a5fe3b4bbc0b291, type: 3}
-    - {fileID: 2800000, guid: 6ed17e2b784dc6e4893137640bc00a36, type: 3}
-    - {fileID: 2800000, guid: f19c3e21b330ddf4b87d7692c641dfc4, type: 3}
-    - {fileID: 2800000, guid: a92af6c531c15e944a7225eb4763ff56, type: 3}
-    - {fileID: 2800000, guid: e58c3d971e35b7040ae035c76999e4b0, type: 3}
-    - {fileID: 2800000, guid: 86f16bfded9762f45b7508098e8682c0, type: 3}
-    - {fileID: 2800000, guid: 0b7401ae3f09c004fbb4b33b87232670, type: 3}
-    - {fileID: 2800000, guid: 59a671074d21e5d43b9d1890e8f0b8e2, type: 3}
-    totalSpriteSurfaceArea: 219451
+    - {fileID: 102900000, guid: 37f788521255ca04b92f24082339cabd, type: 3}
+    totalSpriteSurfaceArea: 505415
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: f19c3e21b330ddf4b87d7692c641dfc4, type: 3}
+  - {fileID: 21300000, guid: 2978fc314e5b0f648980b1cc0d38f017, type: 3}
+  - {fileID: 21300000, guid: 8bc128b157561a24b87a1c18066782a1, type: 3}
+  - {fileID: 21300000, guid: 5af5f572b9a6cc4408a3569394dee01c, type: 3}
   - {fileID: 21300000, guid: a92af6c531c15e944a7225eb4763ff56, type: 3}
+  - {fileID: 21300000, guid: 569f28266db3d5f4ca10ef00b20597f2, type: 3}
   - {fileID: 21300000, guid: 59a671074d21e5d43b9d1890e8f0b8e2, type: 3}
+  - {fileID: 21300000, guid: 7896b80732302d4448eb1398b629ef71, type: 3}
+  - {fileID: 21300000, guid: 0a164f1788537664a8533bbae63955ca, type: 3}
   - {fileID: 21300000, guid: e58c3d971e35b7040ae035c76999e4b0, type: 3}
+  - {fileID: 21300000, guid: 9bcba559f0c5b2c42a63d2e370290cfc, type: 3}
+  - {fileID: 21300000, guid: b7be439a83ac513448ce4f36bc81f2c9, type: 3}
   - {fileID: 21300000, guid: 6ed17e2b784dc6e4893137640bc00a36, type: 3}
   - {fileID: 21300000, guid: b5069c5df46f18e48a5fe3b4bbc0b291, type: 3}
   - {fileID: 21300000, guid: 86f16bfded9762f45b7508098e8682c0, type: 3}
   - {fileID: 21300000, guid: 0b7401ae3f09c004fbb4b33b87232670, type: 3}
   m_PackedSpriteNamesToIndex:
   - scrollview
+  - score-container
+  - healthbar-foreground
+  - healthbar-damaged
   - scrollbar-thumb
+  - healthbar-background
   - pausemenu
+  - pistol-hud
+  - weight-icon
   - Description Area
+  - healthbar-health
+  - game-icon
   - logo
   - mainmenu
   - Button BG shadow

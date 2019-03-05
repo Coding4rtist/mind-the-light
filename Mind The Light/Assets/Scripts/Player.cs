@@ -51,10 +51,18 @@ public class Player : MonoBehaviour {
    }
 
    private void Update() {
+      if(HUD.Paused) {
+         return;
+      }
+
       if(Input.GetKeyDown(KeyCode.E)) {
          foreach(InteractiveObject obj in interactiveObjects) {
             obj.Interact(this);
          }
+      }
+
+      if(Input.GetKeyDown(KeyCode.Escape)) {
+         HUD.Instance.Pause();
       }
    }
 

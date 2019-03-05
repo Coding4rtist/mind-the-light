@@ -53,6 +53,10 @@ public class GunController : MonoBehaviourPun, IPunObservable {
          return;
       }
 
+      if(HUD.Paused || !GameManager.Instance.roundStarted) {
+         return;
+      }
+
       Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
       gunAngle = HandleAimRotation(mousePos);

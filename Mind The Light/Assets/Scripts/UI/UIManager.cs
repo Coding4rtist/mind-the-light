@@ -28,6 +28,10 @@ public class UIManager : MonoBehaviour {
       lobbyScreen.SetActive(screen == 1);
       roomScreen.SetActive(screen == 2);
 
+      if(HUD.Paused) {
+         HUD.Instance.Pause();
+      }
+
       gameUI.SetActive(false);
       mainMenuUI.SetActive(true);
    }
@@ -37,6 +41,10 @@ public class UIManager : MonoBehaviour {
 
       mainMenuUI.SetActive(false);
       gameUI.SetActive(true);
+   }
+
+   public void ToGame(int screen) {
+      //TODO rimpiazzare togame (pause) e gestire hud.pause come fatto in tomainmenu
    }
 
    #endregion

@@ -78,6 +78,7 @@ public class Spy : Actor {
          return;
 
       curHealth -= damage;
+      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
       Debug.Log(transform.name + " now has " + curHealth + "hp.");
 
       if (curHealth <= 0) {

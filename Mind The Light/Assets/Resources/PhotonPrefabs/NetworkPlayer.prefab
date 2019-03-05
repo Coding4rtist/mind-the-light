@@ -67,4 +67,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PV: {fileID: 0}
+  actorID: -1
   teamID: -1

@@ -46,17 +46,13 @@ SpriteAtlas:
     - {fileID: 2800000, guid: fae21454e61d3994f8fa57ddec7ff813, type: 3}
     - {fileID: 2800000, guid: 34f41c4604724714290ac8647b51c109, type: 3}
     - {fileID: 2800000, guid: 216050f3a50cf83468a202f5786440eb, type: 3}
-    - {fileID: 2800000, guid: 6895ac036840a67488459024e4872512, type: 3}
-    - {fileID: 2800000, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
-    - {fileID: 2800000, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
-    - {fileID: 2800000, guid: ac4c08ad7a33a3d4f988c8930982dc1c, type: 3}
-    - {fileID: 2800000, guid: cb38a9969cea6a940abe226f4776a2c9, type: 3}
     - {fileID: 2800000, guid: d605ab477bc20704abaee162e67b4f39, type: 3}
-    totalSpriteSurfaceArea: 120614
+    - {fileID: 102900000, guid: 50daf11c61b3ad84cb658260037bd77f, type: 3}
+    - {fileID: 102900000, guid: 93df42a799a4c884dbc22c3bea5ab308, type: 3}
+    totalSpriteSurfaceArea: 120485
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: 6895ac036840a67488459024e4872512, type: 3}
   - {fileID: 21300000, guid: 216050f3a50cf83468a202f5786440eb, type: 3}
   - {fileID: 21300028, guid: fae21454e61d3994f8fa57ddec7ff813, type: 3}
   - {fileID: 21300026, guid: fae21454e61d3994f8fa57ddec7ff813, type: 3}
@@ -344,7 +340,6 @@ SpriteAtlas:
   - {fileID: 21300004, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
   - {fileID: 21300002, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
   - {fileID: 21300000, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
-  - {fileID: 21300000, guid: d605ab477bc20704abaee162e67b4f39, type: 3}
   - {fileID: 21300008, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
   - {fileID: 21300010, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
   - {fileID: 21300012, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
@@ -427,7 +422,6 @@ SpriteAtlas:
   - {fileID: 21300006, guid: ac4c08ad7a33a3d4f988c8930982dc1c, type: 3}
   - {fileID: 21300004, guid: ac4c08ad7a33a3d4f988c8930982dc1c, type: 3}
   m_PackedSpriteNamesToIndex:
-  - shadow
   - projectile-1
   - map-tilesheet_14
   - map-tilesheet_13
@@ -715,7 +709,6 @@ SpriteAtlas:
   - shot-flash_2
   - shot-flash_1
   - shot-flash_0
-  - cursor
   - guard-spritesheet_4
   - guard-spritesheet_5
   - guard-spritesheet_6

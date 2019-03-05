@@ -45,14 +45,15 @@ public class GameManager : MonoBehaviour {
       if(roundStarted) {
          timeToEndRound -= Time.deltaTime;
 
-         HUD.Instance.UpdateRoundTimeText((int)timeToEndRound);
+         HUD.Instance.UpdateRoundTimeText(timeToEndRound);
       }
    }
 
 
-   #region Photon Player Functions
+   #region Photon Player Functions (Server Only)
 
    public void SpawnActors() {
+      playersInizialized = 0;
       allCharacters = new GameObject[Consts.GAME_SIZE];
       for(int i=0; i<Consts.GAME_SIZE; i++) {
          string prefabName = Path.Combine(Consts.PHOTON_FOLDER, Consts.CHARACTER_NAMES[i%2]);
@@ -68,8 +69,6 @@ public class GameManager : MonoBehaviour {
    }
 
    public void LinkActor(PhotonPlayer photonPlayer) {
-      photonPlayer.teamID = nextPlayerTeam;
-
       Vector3 spawnPoint = Vector3.zero;
       if (nextPlayerTeam == 0) {
          int rand = Random.Range(0, spawnPointsGuards.Length);
@@ -80,14 +79,13 @@ public class GameManager : MonoBehaviour {
          spawnPoint = spawnPointsSpies[rand].position;
       }
 
-      GameObject actorGO = allCharacters[playersInizialized];
-
-      Player player = actorGO.GetComponent<Player>();
+      Debug.Log("PI:" + playersInizialized);
+      Player player = allCharacters[playersInizialized].GetComponent<Player>();
       player.TeamID = nextPlayerTeam;
       player.PV.TransferOwnership(photonPlayer.PV.Owner);
-      PlayerCamera pCamera = Camera.main.transform.parent.GetComponent<PlayerCamera>();
-      player.SetCamera(pCamera);
-      pCamera.target = actorGO.transform;
+
+      photonPlayer.actorID = player.PV.ViewID;
+      photonPlayer.teamID = nextPlayerTeam;
 
       playersInizialized++;
       if(playersInizialized == Consts.GAME_SIZE) {
@@ -111,17 +109,19 @@ public class GameManager : MonoBehaviour {
    }
 
    public void StartRound() {
-      currentRound++;
-      roundStarted = true;
       timeToEndRound = Consts.TIMER_ROUND_GAME;
+      currentRound++;
+
+      roundReady = false;
+      roundStarted = true;
+      
       Debug.Log("Round Started!");
-      HUD.Instance.UpdateRoundInfoText("");
+      //HUD.Instance.UpdateRoundInfoText("");
       HUD.Instance.UpdateRoundInfoText("Round Started!");
    }
 
    public void EndRound() {
       UpdateTeam();
-      roundReady = false;
       roundStarted = false;
       Debug.Log("Round Ended!");
       HUD.Instance.UpdateRoundInfoText("Round Ended!");
@@ -132,6 +132,11 @@ public class GameManager : MonoBehaviour {
       else {
          // TODO Game Over Screen
       }
+   }
+
+   public void ResetRounds() {
+      roundReady = false;
+      roundStarted = false;
    }
 
    #endregion

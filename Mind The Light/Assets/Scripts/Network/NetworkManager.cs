@@ -243,11 +243,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
       //Debug.Log("Room Left " + isGameStarted + " " + PhotonNetwork.CountOfRooms);
 
-      UIManager.Instance.ToMainMenu(1);
+      
       if (isGameStarted) {
+         GameManager.Instance.ResetRounds();
+         UIManager.Instance.ToMainMenu(1);
+
          cachedRoomList.Remove(roomName);
          ClearRoomListView();
          UpdateRoomListView();
+      }
+      else {
+         UIManager.Instance.ToMainMenu(1);
       }
       SetRoomDefaults();
    }
