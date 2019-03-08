@@ -46,5 +46,9 @@ MonoBehaviour:
   - RPC_EndRound
   - RPC_StartRound
   - RPC_ReadyRound
+  - RPC_LinkActor
+  - RPC_LinkedActor
+  - RPC_Teleport
+  - RPC_SetDefaults
   DisableAutoOpenWizard: 1
   ShowSettings: 0

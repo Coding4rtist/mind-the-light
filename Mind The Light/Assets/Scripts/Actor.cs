@@ -16,6 +16,9 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
    public Facing facing;
    private bool oldFlipX;
 
+   [HideInInspector]
+   protected bool isDead = false;
+
    //public Vector3 movDir = Vector3.zero;
    //public float moveForce = 100f;
    //private float dirVel;
@@ -23,7 +26,7 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
    public float bushSlowdown;
 
    public Player p;
-   private Animator anim;
+   protected Animator anim;
    private Rigidbody2D rb;
    protected SpriteRenderer sr;
    protected AudioSource audioS;
@@ -57,7 +60,7 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
          }
       }
 
-      if (!p.PV.IsMine) {
+      if (!p.PV.IsMine || isDead) {
          return;
       }
 
@@ -138,6 +141,25 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
       }
       rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
       //rb.velocity = velocity;
+   }
+
+   public virtual void SetDefaults() {
+
+   }
+
+   [PunRPC]
+   public virtual void RPC_SetDefaults() {
+
+   }
+
+   public void Teleport(Vector2 newPos) {
+      p.PV.RPC("RPC_Teleport", RpcTarget.All, newPos);
+   }
+
+
+   [PunRPC]
+   protected void RPC_Teleport(Vector2 newPos) {
+      rb.position = newPos;
    }
 
    [PunRPC]

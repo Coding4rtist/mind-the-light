@@ -10,7 +10,8 @@ public class GunController : MonoBehaviourPun, IPunObservable {
    private PhotonView PV;
 
    public GameObject gunGO;
-   private Gun gun;
+   [HideInInspector]
+   public Gun gun;
 
 
    public Transform fovTransform;

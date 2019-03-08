@@ -14,7 +14,8 @@ public class Gun : MonoBehaviour {
    public Actor owner;
    public float TimeBetweenShots = 0.2f; // ms
    public float reloadTime = 0.3f;
-   public int maxAmmoPerMag = 10;
+   public int maxAmmoPerMag = 9;
+
    public int currentAmmoInMag;
    public float damage = 10f;
 
@@ -59,22 +60,14 @@ public class Gun : MonoBehaviour {
       audioSource = GetComponent<AudioSource>();
 
       owner = transform.parent.GetComponent<Actor>();
+      SetDefaults();
    }
-
-   void Start() {
-      currentAmmoInMag = maxAmmoPerMag;
-   }
-
-
-   void Update() {
-      
-   }
-
 
    public AttackResult Shoot(float delay) {
       if (!isReloading && !isShooting && currentAmmoInMag > 0) {
          isShooting = true;
          currentAmmoInMag--;
+         HUD.Instance.UpdateMagazine(currentAmmoInMag);
          sr.sprite = shootSprite;
          audioSource.PlayOneShot(soundsShoot[currentAmmoInMag % 2]);
 
@@ -143,6 +136,7 @@ public class Gun : MonoBehaviour {
       isReloading = false;
       sr.sprite = normalSprite;
       currentAmmoInMag = maxAmmoPerMag;
+      HUD.Instance.UpdateMagazine(currentAmmoInMag);
    }
 
    public void DoScreenShake() {
@@ -150,7 +144,12 @@ public class Gun : MonoBehaviour {
       shakeSettings.angle = aimAngle;
       owner.p.myCamera.DoGunScreenShake(shakeSettings);
    }
-   
+
+   public void SetDefaults() {
+      currentAmmoInMag = maxAmmoPerMag;
+      HUD.Instance.UpdateMagazine(currentAmmoInMag);
+   }
+
 }
 
 public enum AttackResult {

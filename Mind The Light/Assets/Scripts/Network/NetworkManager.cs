@@ -77,9 +77,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
    #region Lobby Management
 
-   [Header("Lobby Management")]
+
    private string nickName = "";
    private string roomName;
+   [Header("Lobby Management")]
+   public TMP_InputField roomNameInput;
    public TextMeshProUGUI roomNameText;
    public GameObject roomListEntryPrefab;
    public Transform roomListContent;
@@ -125,7 +127,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
       //Debug.Log("Joined lobby");
 
-      UIManager.Instance.ToMainMenu(1);
+      UIManager.Instance.ToMainMenu(MainMenuScreen.Lobby);
    }
 
    public override void OnCreateRoomFailed(short returnCode, string message) {
@@ -163,7 +165,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       base.OnJoinedRoom();
       Debug.Log("You are now in room");
 
-      UIManager.Instance.ToMainMenu(2);
+      UIManager.Instance.ToMainMenu(MainMenuScreen.Room);
       SetRoomDefaults();
       startButton.SetActive(PhotonNetwork.IsMasterClient && Consts.GAME_SIZE > 2);
 
@@ -175,7 +177,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
       Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
       roomName = PhotonNetwork.CurrentRoom.Name;
-      roomNameText.text = roomName;
+      roomNameText.text = PhotonNetwork.CurrentRoom.Name;
       roomStatusText.text = "<style=\"C1\">You joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
 
       if (playersInRoom == Consts.GAME_SIZE) {
@@ -246,14 +248,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       
       if (isGameStarted) {
          GameManager.Instance.ResetRounds();
-         UIManager.Instance.ToMainMenu(1);
+         UIManager.Instance.ToMainMenu(MainMenuScreen.Lobby);
 
          cachedRoomList.Remove(roomName);
          ClearRoomListView();
          UpdateRoomListView();
       }
       else {
-         UIManager.Instance.ToMainMenu(1);
+         UIManager.Instance.ToMainMenu(MainMenuScreen.Lobby);
       }
       SetRoomDefaults();
    }
@@ -312,11 +314,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
    }
 
    public void OnCreateRoomButtonClicked() {
-      if (roomName == "" || roomName == null) {
+      if (roomNameInput.text == "" || roomNameInput.text == null) {
          Debug.Log("Can't create a new room, name field is empty");
          lobbyStatusText.text = "<style=\"C2\">Can't create a new room, name field is empty</style>";
          return;
       }
+      roomName = roomNameInput.text;
+
       Debug.Log("Trying to create a new room");
       RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)Consts.GAME_SIZE, CleanupCacheOnLeave = true };
       PhotonNetwork.CreateRoom(roomName, roomOps);
@@ -341,10 +345,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
    public void OnNicknameChanged(string name) {
       nickName = name;
       PhotonNetwork.NickName = name;
-   }
-
-   public void OnRoomNameChanged(string name) {
-      roomName = name;
    }
 
    #endregion
@@ -393,6 +393,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       isGameStarted = false;
       readyToCount = false;
       readyToStart = false;
+      roomName = "";
    }
 
    private void SetStartingTimer(bool roomIsFull) {

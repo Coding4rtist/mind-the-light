@@ -24,7 +24,10 @@ public class HUD : MonoBehaviour {
    private float damageHealthTimer;
    private float lastDamageHealthAmount;
 
+   [Header("Magazine")]
+   public GameObject[] ammo;
 
+   public TextMeshProUGUI playersReadyText;
 
 
    private void Awake() {
@@ -53,7 +56,7 @@ public class HUD : MonoBehaviour {
 
    public void Pause() {
       Paused = !Paused;
-      UIManager.Instance.ToGame(Paused);
+      UIManager.Instance.ToGame(Paused ? GameScreen.Pause : GameScreen.Empty);
    }
 
    public void UpdateRoundInfoText(string text) {
@@ -89,5 +92,11 @@ public class HUD : MonoBehaviour {
 
       damageHealthTimer = 1f;
       lastDamageHealthAmount = fillAmount;
+   }
+
+   public void UpdateMagazine(int currentAmmo) {
+      for(int i=0; i<9; i++) {
+         ammo[i].SetActive(i < currentAmmo);
+      }
    }
 }

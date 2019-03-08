@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
    public string NickName { get { return PV.Controller.NickName; } }
    public int TeamID { get; set; }
 
-   private Actor actor;
+   public Actor actor;
    [HideInInspector]
    public PlayerInput input;
 
@@ -32,7 +32,6 @@ public class Player : MonoBehaviour {
    }
 
    private void OnTriggerEnter2D(Collider2D other) {
-      Debug.Log(other.name + " " + other.gameObject.layer + "|" + interactiveObjectsMask.value);
       if(((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
          Debug.Log("è interattivo");
          Transform target = other.transform;

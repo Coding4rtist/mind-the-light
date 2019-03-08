@@ -5,27 +5,18 @@ using Photon.Pun;
 
 public class Spy : Actor {
 
-   private bool isDead = false;
-   public bool IsDead {
-      get { return isDead; }
-      protected set { isDead = value; }
-   }
-
    [SerializeField]
    private float maxHealth = 100f;
-
    private float curHealth;
-
    private bool isFlashing;
 
-   public void Setup() {
-      SetDefaults();
-   }
+   public AudioClip takeDmgSound;
+   public AudioClip deathSound;
+
+   private Coroutine respawnCoroutine;
 
    private new void Awake() {
       base.Awake();
-
-      Setup();
    }
 
    public void OnSpyHit(Actor damager, float damage) {
@@ -42,13 +33,18 @@ public class Spy : Actor {
       Debug.Log(transform.name + " is dead.");
       Server.Death(killerName, p.NickName);
 
-      StartCoroutine(Respawn());
+      audioS.PlayOneShot(deathSound);
+      anim.SetBool("Dead", true);
+
+      respawnCoroutine = StartCoroutine(Respawn());
    }
 
    private IEnumerator Respawn() {
       yield return new WaitForSeconds(3f);
 
       SetDefaults();
+      int rand = Random.Range(0, GameManager.Instance.spawnPointsSpies.Length);
+      Teleport(GameManager.Instance.spawnPointsSpies[rand].position);
       //Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
       //transform.position = spawnPoint.position;
       //transform.rotation = spawnPoint.rotation;
@@ -66,11 +62,27 @@ public class Spy : Actor {
       isFlashing = false;
    }
 
-   public void SetDefaults() {
-      isDead = false;
-      curHealth = maxHealth;
+   public override void SetDefaults() {
+      if(PhotonNetwork.IsMasterClient)
+         p.PV.RPC("RPC_SetDefaults", RpcTarget.All);
    }
 
+   [PunRPC]
+   public override void RPC_SetDefaults() {
+      base.RPC_SetDefaults();
+
+      Debug.Log("RPC_SetDefaults");
+
+      if (respawnCoroutine != null) {
+         StopCoroutine(respawnCoroutine);
+         respawnCoroutine = null;
+      }
+
+      isDead = false;
+      curHealth = maxHealth;
+      anim.SetBool("Dead", false);
+      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
+   }
 
    [PunRPC]
    private void RPC_OnSpyHit(string damagerName, float damage) {
@@ -85,6 +97,7 @@ public class Spy : Actor {
          Die(damagerName);
       }
       else {
+         audioS.PlayOneShot(takeDmgSound);
          if (!isFlashing) {
             StartCoroutine(HitFlashAnim());
          }

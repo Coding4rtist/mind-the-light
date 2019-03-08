@@ -49,7 +49,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: d605ab477bc20704abaee162e67b4f39, type: 3}
     - {fileID: 102900000, guid: 50daf11c61b3ad84cb658260037bd77f, type: 3}
     - {fileID: 102900000, guid: 93df42a799a4c884dbc22c3bea5ab308, type: 3}
-    totalSpriteSurfaceArea: 120485
+    totalSpriteSurfaceArea: 124535
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -401,13 +401,19 @@ SpriteAtlas:
   - {fileID: 21300042, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300044, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300046, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300066, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300048, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300064, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300050, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300062, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300052, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300060, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300054, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300056, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300058, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300070, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300038, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
+  - {fileID: 21300068, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300036, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300022, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
   - {fileID: 21300020, guid: 96535f2dde84c9b4f85498031511c667, type: 3}
@@ -770,13 +776,19 @@ SpriteAtlas:
   - spy-sprite_21
   - spy-sprite_22
   - spy-sprite_23
+  - spy-sprite_33
   - spy-sprite_24
+  - spy-sprite_32
   - spy-sprite_25
+  - spy-sprite_31
   - spy-sprite_26
+  - spy-sprite_30
   - spy-sprite_27
   - spy-sprite_28
   - spy-sprite_29
+  - spy-sprite_35
   - spy-sprite_19
+  - spy-sprite_34
   - spy-sprite_18
   - spy-sprite_11
   - spy-sprite_10

@@ -13,68 +13,66 @@ public class PhotonPlayer : MonoBehaviour {
    private void Awake() {
       PV = GetComponent<PhotonView>();
 
-      GameManager.Instance.myPlayerPV = PV;
+      if (PV.IsMine)
+         GameManager.Instance.myPlayer = this;
 
    }
 
    private void Start() {
       if (PV.IsMine) {
-         PV.RPC("RPC_GetTeam", RpcTarget.MasterClient); // Only the masterclient knows teams
+         PV.RPC("RPC_LinkActor", RpcTarget.MasterClient); // Only the masterclient knows teams
       }
    }
 
    void Update() {
-      if(!PV.IsMine) {
-         return;
-      }
-      //if(myChar == null && teamID != -1) {
-      //   if(PV.IsMine) {
-      //      SpawnActor();
-
-      //      GameManager.Instance.ReadyRound();
-      //   }
+      //if (!PV.IsMine) {
+      //   return;
       //}
 
       if (PhotonNetwork.IsMasterClient) {
          if (GameManager.Instance.timeToStartRound <= 0f && GameManager.Instance.roundReady) {
-            GameManager.Instance.StartRound();
-            PV.RPC("RPC_StartRound", RpcTarget.Others);
+            PV.RPC("RPC_StartRound", RpcTarget.All);
          }
       
          if (GameManager.Instance.timeToEndRound <= 0f && GameManager.Instance.roundStarted) {
-            GameManager.Instance.EndRound();
-            PV.RPC("RPC_EndRound", RpcTarget.Others);
+            PV.RPC("RPC_EndRound", RpcTarget.All);
          }
       }
    }
 
    [PunRPC]
-   private void RPC_GetTeam() {
+   private void RPC_LinkActor() {
       GameManager.Instance.LinkActor(this);
-
-      PV.RPC("RPC_SentTeam", RpcTarget.All, actorID, teamID);
    }
 
    [PunRPC]
-   void RPC_SentTeam(int actor, int team) {
+   void RPC_LinkedActor(int actor, int team, int playersReady) {
       actorID = actor;
       teamID = team;
 
+
+      if (HUD.Instance != null) {
+         HUD.Instance.playersReadyText.text = "Players ready [" + playersReady + "/" + Consts.GAME_SIZE + "]";
+      }
+
       // Set Camera Target
-      if(PV.IsMine) {
+      if (PV.IsMine) {
          Player player = PhotonView.Find(actor).GetComponent<Player>();
          PlayerCamera pCamera = Camera.main.transform.parent.GetComponent<PlayerCamera>();
          player.SetCamera(pCamera);
          pCamera.target = player.transform;
-
-         UIManager.Instance.ToGame(false);
-         // Set Default Values (for the current actor)
-         HUD.Instance.SelectActor(teamID);
       }
    }
 
    [PunRPC]
-   void RPC_ReadyRound() {
+   void RPC_ReadyRound(int currentRound) {
+      GameManager.Instance.currentRound = currentRound;
+
+      UIManager.Instance.ToGame(GameScreen.Empty);
+      // Set Default Values (for the current actor)
+      //Debug.Log("SELECT ACTOR " + GameManager.Instance.myPlayer.teamID + "-" + teamID);
+      HUD.Instance.SelectActor(GameManager.Instance.myPlayer.teamID);
+
       GameManager.Instance.ReadyRound();
    }
 
@@ -86,5 +84,8 @@ public class PhotonPlayer : MonoBehaviour {
    [PunRPC]
    void RPC_EndRound() {
       GameManager.Instance.EndRound();
+      PhotonView.Find(actorID).TransferOwnership(PhotonNetwork.CurrentRoom.MasterClientId);
+      GameManager.Instance.myPlayer.actorID = -1;
+      GameManager.Instance.myPlayer.teamID = -1;
    }
 }
