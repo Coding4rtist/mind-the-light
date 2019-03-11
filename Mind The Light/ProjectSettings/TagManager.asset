@@ -23,8 +23,8 @@ TagManager:
   - Collidable
   - InteractiveObject
   - Entity
-  - 
-  - 
+  - ShadowCaster
+  - Lighting
   - 
   - 
   - 

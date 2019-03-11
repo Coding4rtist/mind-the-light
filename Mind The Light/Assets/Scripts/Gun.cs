@@ -7,7 +7,7 @@ public class Gun : MonoBehaviour {
 
    public float aimAngle;
 
-   private const float speed = 20f * 16;
+   private const float speed = 20f * 16f;
 
 
    //public string Name;
@@ -28,14 +28,6 @@ public class Gun : MonoBehaviour {
 
    public bool isShooting = false;
    public bool isReloading = false;
-   //private bool m_canAttemptActiveReload;
-   //private bool m_reloadWhenDoneFiring;
-   //private bool m_isCurrentlyFiring;
-   //private bool m_isAudioLooping;
-   //private float m_continuousAttackTime;
-   //private float m_reloadElapsed;
-
-
 
    //public bool AutoRepeat;
 

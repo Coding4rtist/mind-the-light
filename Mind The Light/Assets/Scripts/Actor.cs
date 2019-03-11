@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Actor : MonoBehaviourPun, IPunObservable {
+public abstract class Actor : MonoBehaviourPun {
 
    //public string state;
 
@@ -30,8 +30,6 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
    private Rigidbody2D rb;
    protected SpriteRenderer sr;
    protected AudioSource audioS;
-
-   private Vector2 _networkPosition;
 
    private bool doDustUps = true;
    private float dustUpInterval = 0.4f;
@@ -106,7 +104,7 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
       //state = "IDLE";
 
       // Face mouse position
-      Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+      Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position - new Vector3(0, 4f, 0);
       mousePos = mousePos.normalized;
       float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
       // Side
@@ -136,11 +134,10 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
 
    private void FixedUpdate() {
       if(!p.PV.IsMine) {
-         rb.position = Vector2.MoveTowards(rb.position, _networkPosition, Time.fixedDeltaTime);
          return;
       }
       rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-      //rb.velocity = velocity;
+      rb.velocity = velocity;
    }
 
    public virtual void SetDefaults() {
@@ -174,19 +171,5 @@ public abstract class Actor : MonoBehaviourPun, IPunObservable {
          return Mathf.Min(start + shift, end);
       else
          return Mathf.Max(start - shift, end);
-   }
-
-   public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-      if(stream.IsWriting) {
-         stream.SendNext(rb.position);
-         stream.SendNext(velocity);
-      }
-      else {
-         _networkPosition = (Vector2)stream.ReceiveNext();
-         rb.velocity = (Vector2)stream.ReceiveNext();
-         velocity = rb.velocity;
-         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTimestamp));
-         _networkPosition += (velocity * lag);
-      }
    }
 }

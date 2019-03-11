@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
+public class Projectile : MonoBehaviour {
 
    public LayerMask collisionMask;
 
@@ -37,8 +37,8 @@ public class Projectile : MonoBehaviour/*MonoBehaviourPun, IPunObservable*/ {
 
    void CheckCollisions(float moveDistance) {
       //Ray2D ray = new Ray2D(transform.position, rb.velocity);
-      RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, moveDistance, collisionMask);
-      Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance, Color.red);
+      RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, moveDistance * 15, collisionMask);
+      Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance * 15, Color.red);
 
       if (hit) {
          OnHitObject(hit);

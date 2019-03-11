@@ -49,7 +49,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: d605ab477bc20704abaee162e67b4f39, type: 3}
     - {fileID: 102900000, guid: 50daf11c61b3ad84cb658260037bd77f, type: 3}
     - {fileID: 102900000, guid: 93df42a799a4c884dbc22c3bea5ab308, type: 3}
-    totalSpriteSurfaceArea: 124535
+    totalSpriteSurfaceArea: 130295
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -380,10 +380,17 @@ SpriteAtlas:
   - {fileID: 21300010, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300012, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300014, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300044, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300046, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300040, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300042, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300038, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300036, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300026, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300024, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300022, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300020, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300034, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300032, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300030, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300028, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
@@ -755,10 +762,17 @@ SpriteAtlas:
   - door-1_5
   - door-1_6
   - door-1_7
+  - door-1_22
+  - door-1_23
+  - door-1_20
+  - door-1_21
+  - door-1_19
+  - door-1_18
   - door-1_13
   - door-1_12
   - door-1_11
   - door-1_10
+  - door-1_17
   - door-1_16
   - door-1_15
   - door-1_14

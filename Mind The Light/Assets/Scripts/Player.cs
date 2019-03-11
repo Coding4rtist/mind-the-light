@@ -32,12 +32,14 @@ public class Player : MonoBehaviour {
    }
 
    private void OnTriggerEnter2D(Collider2D other) {
-      if(((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
-         Debug.Log("è interattivo");
-         Transform target = other.transform;
-         InteractiveObject interactive = target.GetComponent<InteractiveObject>();
-         interactive.OnEnteredRange(this);
-         interactiveObjects.Add(interactive);
+      if (((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
+         InteractiveObject interactive = other.GetComponent<InteractiveObject>();
+
+         if (!interactiveObjects.Contains(interactive)) {
+            interactive.OnEnteredRange(this);
+            interactiveObjects.Add(interactive);
+         }
+
       }
    }
 

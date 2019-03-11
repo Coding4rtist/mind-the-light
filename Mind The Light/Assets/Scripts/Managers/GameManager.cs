@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour {
    #region Actor Management (Server only)
 
    public void SpawnActors() {
-      randomTeam = Random.Range(0, 2);
+      //randomTeam = Random.Range(0, 2);
       currentRound = 0;
       guardsLinked = 0;
       spiesLinked = 0;
