@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 
 public class Server : MonoBehaviour {
-
+   /*
    public static Server Instance;
 
    public Chat chat;
@@ -74,6 +74,7 @@ public class Server : MonoBehaviour {
       Server.Instance.chat.AddLine(-1, sender, msg, teamOnly);
    }
 
+   */
    //[PunRPC]
    //private void RPC_Welcome() {
 

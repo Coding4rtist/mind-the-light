@@ -52,7 +52,7 @@ public class PhotonPlayer : MonoBehaviour {
 
 
       if (HUD.Instance != null) {
-         HUD.Instance.playersReadyText.text = "Players ready [" + playersReady + "/" + Consts.GAME_SIZE + "]";
+         HUD.Instance.UpdatePlayersReadyText(playersReady);
       }
 
       // Set Camera Target
@@ -68,6 +68,7 @@ public class PhotonPlayer : MonoBehaviour {
    void RPC_ReadyRound(int currentRound) {
       GameManager.Instance.currentRound = currentRound;
 
+      Chat.Instance.Reset();
       UIManager.Instance.ToGame(GameScreen.Empty);
       // Set Default Values (for the current actor)
       //Debug.Log("SELECT ACTOR " + GameManager.Instance.myPlayer.teamID + "-" + teamID);

@@ -50,5 +50,10 @@ MonoBehaviour:
   - RPC_LinkedActor
   - RPC_Teleport
   - RPC_SetDefaults
+  - RPC_Init
+  - RPC_PlaceTargetObjects
+  - RPC_InteractDoor
+  - RPC_StealObject
+  - RPC_CloseAllDoors
   DisableAutoOpenWizard: 1
   ShowSettings: 0

@@ -7,54 +7,66 @@ public class Door : InteractiveObject {
    public bool IsOpen = false;
    public bool IsLocked = false;
 
-   private SpriteRenderer sr;
+
    private Animator anim;
    private AudioSource audioS;
    private GameObject closedColliderGO;
 
-   private Color outlineColor = Color.white;
-   private Color transparentColor = new Color(0f, 0f, 0f, 0f);
 
-   private void Awake() {
+
+   private new void Awake() {
+      base.Awake();
       closedColliderGO = transform.GetChild(0).gameObject;
 
-      sr = GetComponent<SpriteRenderer>();
       anim = GetComponent<Animator>();
       audioS = GetComponent<AudioSource>();
 
       anim.SetBool("opened", IsOpen);
    }
 
-   public override void OnEnteredRange(Player interactor) {
-      // enable outline
-      Debug.Log("DOOR ENTERED RANGE");
-      sr.material.SetColor("_Color", outlineColor);
+   public override void OnEnterRange(Player interactor) {
+      base.OnEnterRange(interactor);
+
    }
 
    public override void OnExitRange(Player interactor) {
-      // disable outline
-      Debug.Log("DOOR EXIT RANGE");
-      sr.material.SetColor("_Color", transparentColor);
+      base.OnExitRange(interactor);
    }
 
    public override void Interact(Player interactor) {
       Debug.Log("INTERACT");
-      if(IsOpen) {
-         Close(interactor);
+      //if(IsOpen) {
+      //   Close();
+      //}
+      //else {
+      //   if (IsLocked) {
+      //      Unlock();
+      //      Open();
+      //   }
+      //   else {
+      //      Open();
+      //   }
+      //}
+
+      if(IsLocked && interactor.actor.GetType() == typeof(Spy)) {
+         Unlock();
+         return;
+      }
+
+      WorldManager.Instance.InteractDoor(this);
+   }
+
+   public void SyncInteract() {
+      if (IsOpen) {
+         Close();
       }
       else {
-         if (IsLocked) {
-            Unlock();
-            Open(interactor);
-         }
-         else {
-            Open(interactor);
-         }
+         Open();
       }
    }
 
 
-   private void Open(Player player) {
+   private void Open() {
       if(anim.GetCurrentAnimatorStateInfo(0).IsName("front-closed") || anim.GetCurrentAnimatorStateInfo(0).IsName("side-closed")) {
          anim.SetBool("opened", true);
          closedColliderGO.SetActive(false);
@@ -63,7 +75,7 @@ public class Door : InteractiveObject {
       }
    }
 
-   private void Close(Player player) {
+   private void Close() {
       if (anim.GetCurrentAnimatorStateInfo(0).IsName("front-opened") || anim.GetCurrentAnimatorStateInfo(0).IsName("side-opened")) {
          anim.SetBool("opened", false);
          closedColliderGO.SetActive(true);

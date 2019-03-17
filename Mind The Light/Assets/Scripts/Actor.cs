@@ -6,11 +6,12 @@ using Photon.Pun;
 [RequireComponent(typeof(Rigidbody2D))]
 public abstract class Actor : MonoBehaviourPun {
 
-   //public string state;
+   private const float ACCEL = 1.0f * 16;
+   private const float FRIC = 2.0f * 16;
+   protected const float MAX_SPEED = 3.5f * 16;
 
-   private const float accel = 1.0f * 16;
-   private const float fric = 2.0f * 16;
-   private const float maxSpeed = 3.5f * 16;
+   //public string state;
+   protected float maxSpeed = MAX_SPEED;
 
    public Vector2 velocity;
    public Facing facing;
@@ -44,6 +45,15 @@ public abstract class Actor : MonoBehaviourPun {
       audioS = GetComponent<AudioSource>();
    }
 
+   public virtual void SetDefaults() {
+
+   }
+
+   [PunRPC]
+   public virtual void RPC_SetDefaults() {
+
+   }
+
    private void Update() {
       // Dust Particles
       if (doDustUps && velocity.magnitude > 0f) {
@@ -65,40 +75,40 @@ public abstract class Actor : MonoBehaviourPun {
       // Left
       if (p.input.kLeft && !p.input.kRight) {
          if (velocity.x > 0)
-            velocity.x = Approach(velocity.x, 0, fric);
-         velocity.x = Approach(velocity.x, -maxSpeed, accel);
+            velocity.x = Approach(velocity.x, 0, FRIC);
+         velocity.x = Approach(velocity.x, -maxSpeed, ACCEL);
          //state = "RUN";
       }
 
       // Right
       if (p.input.kRight && !p.input.kLeft) {
          if (velocity.x < 0)
-            velocity.x = Approach(velocity.x, 0, fric);
-         velocity.x = Approach(velocity.x, maxSpeed, accel);
+            velocity.x = Approach(velocity.x, 0, FRIC);
+         velocity.x = Approach(velocity.x, maxSpeed, ACCEL);
          //state = "RUN";
       }
 
       // Up
       if (p.input.kUp && !p.input.kDown) {
          if (velocity.y < 0)
-            velocity.y = Approach(velocity.y, 0, fric);
-         velocity.y = Approach(velocity.y, maxSpeed, accel);
+            velocity.y = Approach(velocity.y, 0, FRIC);
+         velocity.y = Approach(velocity.y, maxSpeed, ACCEL);
          //state = "RUN";
       }
 
       // Down
       if (p.input.kDown && !p.input.kUp) {
          if (velocity.y > 0)
-            velocity.y = Approach(velocity.y, 0, fric);
-         velocity.y = Approach(velocity.y, -maxSpeed, accel);
+            velocity.y = Approach(velocity.y, 0, FRIC);
+         velocity.y = Approach(velocity.y, -maxSpeed, ACCEL);
          //state = "RUN";
       }
 
       // Friction
       if (!p.input.kRight && !p.input.kLeft)
-         velocity.x = Approach(velocity.x, 0, fric);
+         velocity.x = Approach(velocity.x, 0, FRIC);
       if (!p.input.kDown && !p.input.kUp)
-         velocity.y = Approach(velocity.y, 0, fric);
+         velocity.y = Approach(velocity.y, 0, FRIC);
 
       //if (!p.input.kRight && !p.input.kLeft && !p.input.kDown && !p.input.kUp)
       //state = "IDLE";
@@ -138,15 +148,6 @@ public abstract class Actor : MonoBehaviourPun {
       }
       rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
       rb.velocity = velocity;
-   }
-
-   public virtual void SetDefaults() {
-
-   }
-
-   [PunRPC]
-   public virtual void RPC_SetDefaults() {
-
    }
 
    public void Teleport(Vector2 newPos) {

@@ -25,12 +25,6 @@ public class GameManager : MonoBehaviour {
    [Header("Actor Spawn Points")]
    public Transform[] spawnPointsGuards;
    public Transform[] spawnPointsSpies;
-   [Header("Objects Spawn Points")]
-   public Transform[] spawnPointsObjects;
-   public Transform[] spawnPointsKeys;
-
-   public GameObject[] targetObjects;
-   public GameObject[] keysObjects;
 
    private int guardsLinked = 0;
    private int spiesLinked = 0;
@@ -70,7 +64,7 @@ public class GameManager : MonoBehaviour {
    #region Actor Management (Server only)
 
    public void SpawnActors() {
-      //randomTeam = Random.Range(0, 2);
+      //randomTeam = Random.Range(0, 2); //TODO uncomment
       currentRound = 0;
       guardsLinked = 0;
       spiesLinked = 0;
@@ -142,6 +136,8 @@ public class GameManager : MonoBehaviour {
       //Debug.Log("PI:" + PlayersLinked);
 
       if (PlayersLinked == Consts.GAME_SIZE) {
+         WorldManager.Instance.PlaceTargetObjects();
+         WorldManager.Instance.CloseAllDoors();
          myPlayer.PV.RPC("RPC_ReadyRound", RpcTarget.All, currentRound);
       }
       //UpdateTeam();
@@ -179,7 +175,7 @@ public class GameManager : MonoBehaviour {
 
       if (currentRound < Consts.GAME_ROUNDS) {
          UIManager.Instance.ToGame(GameScreen.Round);
-         HUD.Instance.playersReadyText.text = "Players ready [0/" + Consts.GAME_SIZE + "]";
+         HUD.Instance.UpdatePlayersReadyText(0);
       }
       else {
          UIManager.Instance.ToGame(GameScreen.End);
@@ -189,18 +185,6 @@ public class GameManager : MonoBehaviour {
    public void ResetRounds() {
       roundReady = false;
       roundStarted = false;
-   }
-
-   #endregion
-
-   #region Objects Placement (Server Only)
-
-   public void PlaceTargetObjects() {
-
-   }
-
-   public void PlaceKeys() {
-
    }
 
    #endregion

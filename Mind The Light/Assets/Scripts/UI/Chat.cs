@@ -6,20 +6,26 @@ using TMPro;
 
 public class Chat : MonoBehaviour {
 
+   public static Chat Instance;
+
    public GameObject chatMessagePrefab;
+   public ScrollRect scrollRect;
    public Transform chatTransform;
 
    public string chatMsg;
    public List<string> chatLines = new List<string>();
    public AudioClip chatSound;
 
-   private ScrollRect scroll;
+
 
    private void Awake() {
-      scroll = GetComponent<ScrollRect>();
+      Instance = this;
    }
 
    public void Reset() {
+      foreach (Transform child in chatTransform) {
+         Destroy(child.gameObject);
+      }
       chatLines.Clear();
    }
 
@@ -86,7 +92,7 @@ public class Chat : MonoBehaviour {
       // Wait for end of frame AND force update all canvases before setting to bottom.
       yield return new WaitForEndOfFrame();
       Canvas.ForceUpdateCanvases();
-      scroll.verticalNormalizedPosition = 0f;
+      scrollRect.verticalNormalizedPosition = 0f;
       Canvas.ForceUpdateCanvases();
    }
 }

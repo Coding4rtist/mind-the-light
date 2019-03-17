@@ -10,6 +10,7 @@ TagManager:
   - Shot-Flash
   - Wall-Proj-Smoke
   - Walk-Puff
+  - Target-Object
   layers:
   - Default
   - TransparentFX

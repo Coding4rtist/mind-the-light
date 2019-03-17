@@ -2,18 +2,98 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TargetObject : MonoBehaviour {
+public class TargetObject : InteractiveObject {
 
-   
+   //public int index;
+   public int skin;
+   public bool toSteal = false;
+   private bool discovered = false;
 
-   public void Stole() {
-      gameObject.SetActive(false);
+   public Sprite[] skins;
+
+   public GameObject targetGO;
+   public GameObject questionmarkGO;
+
+   private SpriteRenderer objectSR;
+   private AudioSource audioS;
+
+   private Color32 STEAL_COLOR = new Color32(255, 200, 37, 255);
+   private Color32 NOTSTEAL_COLOR = new Color32(196, 36, 48, 255);
+
+   private new void Awake() {
+      base.Awake();
+
+      audioS = GetComponent<AudioSource>();
+
+      objectSR = targetGO.GetComponent<SpriteRenderer>();
+   }
+
+   public void Init(/*int _index, */int _skin) {
+      //index = _index;
+      skin = _skin;
+      objectSR.sprite = skins[_skin];
+      toSteal = false;
+      objectSR.enabled = true;
+      discovered = false;
+      questionmarkGO.SetActive(true);
+   }
+
+   public void Replace() {
+      objectSR.enabled = true;
+   }
+
+   public void Steal() {
+      objectSR.enabled = false;
+      audioS.Play();
+
+      WorldManager.Instance.StealObject(this);
+   }
+
+   public void SyncSteal() {
+      objectSR.enabled = false;
+      audioS.Play();
    }
 
    public bool IsStolen() {
-
-      // loop through all objects
-      return false;
+      return !objectSR.enabled;
    }
 
+   public override void OnEnterRange(Player interactor) {
+      base.OnEnterRange(interactor);
+      if (discovered) {
+         sr.material.SetColor("_Color", toSteal ? STEAL_COLOR : NOTSTEAL_COLOR);
+         objectSR.material.SetColor("_Color", toSteal ? STEAL_COLOR : NOTSTEAL_COLOR);
+      }
+      else {
+         sr.material.SetColor("_Color", outlineColor);
+         objectSR.material.SetColor("_Color", outlineColor);
+      }
+   }
+
+   public override void OnExitRange(Player interactor) {
+      base.OnExitRange(interactor);
+      objectSR.material.SetColor("_Color", transparentColor);
+   }
+
+   public override void Interact(Player interactor) {
+      if (IsStolen()) {
+         return;
+      }
+
+      if (interactor.actor.GetType() == typeof(Spy)) {
+         if(questionmarkGO.activeSelf) {
+            // Discover
+            questionmarkGO.SetActive(false);
+            sr.material.SetColor("_Color", toSteal ? STEAL_COLOR : NOTSTEAL_COLOR);
+            objectSR.material.SetColor("_Color", toSteal ? STEAL_COLOR : NOTSTEAL_COLOR);
+            discovered = true;
+         }
+         else {
+            if(toSteal) {
+               Steal();
+               ((Spy)interactor.actor).StealObject(this);
+            }
+         }
+      }
+   }
 }

@@ -12,23 +12,24 @@ public class HUD : MonoBehaviour {
 
    public TextMeshProUGUI roundInfoText;
    public TextMeshProUGUI roundTimeText;
+   public TextMeshProUGUI playersReadyText;
    private float lastTextTime;
 
    [Header("Actor Hud")]
    public GameObject guardT;
    public GameObject spyT;
 
-   [Header("HealthBar")]
+   [Header("Guard")]
+   public GameObject[] ammo;
+   //private TextMeshProUGUI objectiveGuardText;
+
+   [Header("Thief")]
    public Image healthImage;
    public Image damageImage;
    private float damageHealthTimer;
    private float lastDamageHealthAmount;
-
-   [Header("Magazine")]
-   public GameObject[] ammo;
-
-   public TextMeshProUGUI playersReadyText;
-
+   public TextMeshProUGUI weightText;
+   public TextMeshProUGUI objectiveSpyText;
 
    private void Awake() {
       Instance = this;
@@ -51,12 +52,19 @@ public class HUD : MonoBehaviour {
          lastDamageHealthAmount = 1;
          healthImage.fillAmount = 1;
          damageImage.fillAmount = 1;
+         weightText.text = "0";
       }
    }
 
    public void Pause() {
       Paused = !Paused;
       UIManager.Instance.ToGame(Paused ? GameScreen.Pause : GameScreen.Empty);
+   }
+
+   #region Round
+
+   public void UpdatePlayersReadyText(int playersReady) {
+      playersReadyText.text = "Players ready [" + playersReady + "/" + Consts.GAME_SIZE + "]";
    }
 
    public void UpdateRoundInfoText(string text) {
@@ -87,6 +95,20 @@ public class HUD : MonoBehaviour {
       roundInfoText.text = "";
    }
 
+   #endregion
+
+   #region Guard
+
+   public void UpdateMagazine(int currentAmmo) {
+      for (int i = 0; i < 9; i++) {
+         ammo[i].SetActive(i < currentAmmo);
+      }
+   }
+
+   #endregion
+
+   #region Spy
+
    public void UpdateHealthBar(float fillAmount) {
       healthImage.fillAmount = fillAmount;
 
@@ -94,9 +116,10 @@ public class HUD : MonoBehaviour {
       lastDamageHealthAmount = fillAmount;
    }
 
-   public void UpdateMagazine(int currentAmmo) {
-      for(int i=0; i<9; i++) {
-         ammo[i].SetActive(i < currentAmmo);
-      }
+   public void UpdateObjectsStolen(int curObjects) {
+      objectiveSpyText.text = "Objects to steal: " + (Consts.ITEM_TO_STEAL - curObjects);
+      weightText.text = (curObjects * 5).ToString();
    }
+
+   #endregion
 }

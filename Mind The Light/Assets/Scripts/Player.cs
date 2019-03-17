@@ -23,7 +23,7 @@ public class Player : MonoBehaviour {
    public LayerMask obstacleMask;
    public List<InteractiveObject> interactiveObjects = new List<InteractiveObject>();
 
-   void Start() {
+   void Awake() {
       PV = GetComponent<PhotonView>();
       input = GetComponent<PlayerInput>();
 
@@ -32,11 +32,14 @@ public class Player : MonoBehaviour {
    }
 
    private void OnTriggerEnter2D(Collider2D other) {
+      if (!PV.IsMine)
+         return;
+
       if (((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
          InteractiveObject interactive = other.GetComponent<InteractiveObject>();
 
          if (!interactiveObjects.Contains(interactive)) {
-            interactive.OnEnteredRange(this);
+            interactive.OnEnterRange(this);
             interactiveObjects.Add(interactive);
          }
 
@@ -44,6 +47,9 @@ public class Player : MonoBehaviour {
    }
 
    private void OnTriggerExit2D(Collider2D other) {
+      if (!PV.IsMine)
+         return;
+
       if (((1 << other.gameObject.layer) & interactiveObjectsMask) != 0) {
          InteractiveObject interactive = other.GetComponent<InteractiveObject>();
          interactive.OnExitRange(this);
@@ -52,7 +58,10 @@ public class Player : MonoBehaviour {
    }
 
    private void Update() {
-      if(HUD.Paused) {
+      if (!PV.IsMine)
+         return;
+
+      if (HUD.Paused) {
          return;
       }
 

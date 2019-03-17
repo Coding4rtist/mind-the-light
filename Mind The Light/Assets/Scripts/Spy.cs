@@ -15,8 +15,34 @@ public class Spy : Actor {
 
    private Coroutine respawnCoroutine;
 
+   private List<TargetObject> objectsStolen = new List<TargetObject>();
+
    private new void Awake() {
       base.Awake();
+   }
+
+   public override void SetDefaults() {
+      if (PhotonNetwork.IsMasterClient)
+         p.PV.RPC("RPC_SetDefaults", RpcTarget.All);
+   }
+
+   [PunRPC]
+   public override void RPC_SetDefaults() {
+      base.RPC_SetDefaults();
+
+      Debug.Log("RPC_SetDefaults");
+
+      if (respawnCoroutine != null) {
+         StopCoroutine(respawnCoroutine);
+         respawnCoroutine = null;
+      }
+
+      maxSpeed =  MAX_SPEED + 6f;
+      isDead = false;
+      curHealth = maxHealth;
+      anim.SetBool("Dead", false);
+      objectsStolen = new List<TargetObject>();
+      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
    }
 
    public void OnSpyHit(Actor damager, float damage) {
@@ -31,10 +57,15 @@ public class Spy : Actor {
       isDead = true;
       // Disable components
       Debug.Log(transform.name + " is dead.");
-      Server.Death(killerName, p.NickName);
+      Chat.Instance.KillText(killerName, p.NickName);
 
       audioS.PlayOneShot(deathSound);
       anim.SetBool("Dead", true);
+
+      foreach(TargetObject target in objectsStolen) {
+         target.Replace();
+      }
+      objectsStolen.Clear();
 
       respawnCoroutine = StartCoroutine(Respawn());
    }
@@ -62,28 +93,6 @@ public class Spy : Actor {
       isFlashing = false;
    }
 
-   public override void SetDefaults() {
-      if(PhotonNetwork.IsMasterClient)
-         p.PV.RPC("RPC_SetDefaults", RpcTarget.All);
-   }
-
-   [PunRPC]
-   public override void RPC_SetDefaults() {
-      base.RPC_SetDefaults();
-
-      Debug.Log("RPC_SetDefaults");
-
-      if (respawnCoroutine != null) {
-         StopCoroutine(respawnCoroutine);
-         respawnCoroutine = null;
-      }
-
-      isDead = false;
-      curHealth = maxHealth;
-      anim.SetBool("Dead", false);
-      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
-   }
-
    [PunRPC]
    private void RPC_OnSpyHit(string damagerName, float damage) {
       if (isDead)
@@ -102,5 +111,11 @@ public class Spy : Actor {
             StartCoroutine(HitFlashAnim());
          }
       }
+   }
+
+   public void StealObject(TargetObject target) {
+      objectsStolen.Add(target);
+      maxSpeed -= maxSpeed * 10f / 100f;
+      HUD.Instance.UpdateObjectsStolen(objectsStolen.Count);
    }
 }
