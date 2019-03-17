@@ -14,11 +14,55 @@ public class Spy : Actor {
    public AudioClip deathSound;
 
    private Coroutine respawnCoroutine;
+   private GameObject fovGO;
 
    private List<TargetObject> objectsStolen = new List<TargetObject>();
 
+
+   float freezeTime;
+   bool freeze = false;
+   public bool Freeze {
+      set {
+         freeze = value;
+         if (freeze) {
+            freezeTime = anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
+         }
+      }
+   }
+
+   public int ObjectsStolen {
+      get { return objectsStolen.Count; }
+   }
+
    private new void Awake() {
       base.Awake();
+
+      fovGO = transform.GetChild(2).gameObject;
+   }
+
+   private new void Update() {
+      if (freeze) {
+         AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+         anim.Play(stateInfo.fullPathHash, 0, freezeTime);
+      }
+
+      base.Update();
+
+      if(Input.GetKey(KeyCode.Q) && velocity.magnitude == 0f) {
+         if(!freeze) {
+            freeze = true;
+            p.PV.RPC("RPC_Freeze", RpcTarget.Others, true);
+         }
+      }
+      if(Input.GetKeyUp(KeyCode.Q) || velocity.magnitude != 0f) {
+         freeze = false;
+         p.PV.RPC("RPC_Freeze", RpcTarget.Others, false);
+      }
+   }
+
+   [PunRPC]
+   public void RPC_Freeze(bool value) {
+      freeze = value;
    }
 
    public override void SetDefaults() {
@@ -30,12 +74,12 @@ public class Spy : Actor {
    public override void RPC_SetDefaults() {
       base.RPC_SetDefaults();
 
-      Debug.Log("RPC_SetDefaults");
-
       if (respawnCoroutine != null) {
          StopCoroutine(respawnCoroutine);
          respawnCoroutine = null;
       }
+
+      fovGO.SetActive(p.PV.IsMine);
 
       maxSpeed =  MAX_SPEED + 6f;
       isDead = false;

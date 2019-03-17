@@ -10,6 +10,8 @@ public class PhotonPlayer : MonoBehaviour {
    public int actorID = -1;
    public int teamID = -1;
 
+   private Player player;
+
    private void Awake() {
       PV = GetComponent<PhotonView>();
 
@@ -25,9 +27,9 @@ public class PhotonPlayer : MonoBehaviour {
    }
 
    void Update() {
-      //if (!PV.IsMine) {
-      //   return;
-      //}
+      if (!PV.IsMine) {
+         return;
+      }
 
       if (PhotonNetwork.IsMasterClient) {
          if (GameManager.Instance.timeToStartRound <= 0f && GameManager.Instance.roundReady) {
@@ -35,7 +37,8 @@ public class PhotonPlayer : MonoBehaviour {
          }
       
          if (GameManager.Instance.timeToEndRound <= 0f && GameManager.Instance.roundStarted) {
-            PV.RPC("RPC_EndRound", RpcTarget.All);
+            PV.RPC("RPC_EndRound", RpcTarget.MasterClient, player.gameObject.tag == "Guard");
+            PV.RPC("RPC_EndRound", RpcTarget.Others, player.gameObject.tag == "Spy");
          }
       }
    }
@@ -55,9 +58,11 @@ public class PhotonPlayer : MonoBehaviour {
          HUD.Instance.UpdatePlayersReadyText(playersReady);
       }
 
+      player = PhotonView.Find(actor).GetComponent<Player>();
+      player.actor.SetDefaults();
+
       // Set Camera Target
       if (PV.IsMine) {
-         Player player = PhotonView.Find(actor).GetComponent<Player>();
          PlayerCamera pCamera = Camera.main.transform.parent.GetComponent<PlayerCamera>();
          player.SetCamera(pCamera);
          pCamera.target = player.transform;
@@ -67,6 +72,8 @@ public class PhotonPlayer : MonoBehaviour {
    [PunRPC]
    void RPC_ReadyRound(int currentRound) {
       GameManager.Instance.currentRound = currentRound;
+
+      player.actor.SetDefaults();
 
       Chat.Instance.Reset();
       UIManager.Instance.ToGame(GameScreen.Empty);
@@ -83,8 +90,14 @@ public class PhotonPlayer : MonoBehaviour {
    }
 
    [PunRPC]
-   void RPC_EndRound() {
-      GameManager.Instance.EndRound();
+   public void RPC_RequestEndRound(bool isMaster) {
+      PV.RPC("RPC_EndRound", RpcTarget.MasterClient, isMaster);
+      PV.RPC("RPC_EndRound", RpcTarget.Others, !isMaster);
+   }
+
+   [PunRPC]
+   void RPC_EndRound(bool win) {
+      GameManager.Instance.EndRound(win);
       PhotonView.Find(actorID).TransferOwnership(PhotonNetwork.CurrentRoom.MasterClientId);
       GameManager.Instance.myPlayer.actorID = -1;
       GameManager.Instance.myPlayer.teamID = -1;

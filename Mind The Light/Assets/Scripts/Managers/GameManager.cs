@@ -68,6 +68,7 @@ public class GameManager : MonoBehaviour {
       currentRound = 0;
       guardsLinked = 0;
       spiesLinked = 0;
+      HUD.Instance.Reset();
 
       guardActors = new GameObject[Consts.GAME_SIZE / 2];
       for (int i = 0; i < Consts.GAME_SIZE / 2; i++) {
@@ -104,7 +105,6 @@ public class GameManager : MonoBehaviour {
 
          Player player = guardActors[guardsLinked].GetComponent<Player>();
          player.TeamID = team;
-         player.actor.SetDefaults();
          player.actor.Teleport(spawnPoint);
          player.PV.TransferOwnership(photonPlayer.PV.Owner);
 
@@ -122,7 +122,6 @@ public class GameManager : MonoBehaviour {
 
          Player player = spyActors[spiesLinked].GetComponent<Player>();
          player.TeamID = team;
-         player.actor.SetDefaults();
          player.actor.Teleport(spawnPoint);
          player.PV.TransferOwnership(photonPlayer.PV.Owner);
 
@@ -165,19 +164,21 @@ public class GameManager : MonoBehaviour {
       HUD.Instance.UpdateRoundInfoText("Round Started!");
    }
 
-   public void EndRound() {
+   public void EndRound(bool win) {
       //UpdateTeam();
       roundStarted = false;
       guardsLinked = 0;
       spiesLinked = 0;
       Debug.Log("Round Ended!");
-      HUD.Instance.UpdateRoundInfoText("Round Ended!");
 
       if (currentRound < Consts.GAME_ROUNDS) {
-         UIManager.Instance.ToGame(GameScreen.Round);
+         //HUD.Instance.UpdateRoundInfoText("Round Ended!");
+         HUD.Instance.UpdateRoundScores(win, false);
          HUD.Instance.UpdatePlayersReadyText(0);
+         UIManager.Instance.ToGame(GameScreen.Round);
       }
       else {
+         HUD.Instance.UpdateRoundScores(win, true);
          UIManager.Instance.ToGame(GameScreen.End);
       }
    }

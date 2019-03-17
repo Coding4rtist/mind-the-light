@@ -295,7 +295,7 @@ public class FOV : MonoBehaviour {
       RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, radius, obstacleMask);
       if (hit.collider != null) {
          Vector2 normal = hit.transform.TransformDirection(hit.normal);
-         Debug.DrawRay(hit.point, hit.normal, Color.green);
+         //Debug.DrawRay(hit.point, hit.normal, Color.green);
          result = hit.point;
          if (normal.y < 0) {
             float cos = (result.x - start.x) / radius;

@@ -54,9 +54,9 @@ public abstract class Actor : MonoBehaviourPun {
 
    }
 
-   private void Update() {
+   protected void Update() {
       // Dust Particles
-      if (doDustUps && velocity.magnitude > 0f) {
+      if (doDustUps && rb.velocity.magnitude > 0.1f) {
          dustUpTimer += Time.deltaTime;
          if (dustUpTimer >= dustUpInterval) {
             GameObject dustGO = PoolManager.Instance.GetPooledObject("Walk-Puff", transform.position, transform.rotation);

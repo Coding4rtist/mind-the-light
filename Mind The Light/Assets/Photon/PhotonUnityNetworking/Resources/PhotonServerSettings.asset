@@ -55,5 +55,7 @@ MonoBehaviour:
   - RPC_InteractDoor
   - RPC_StealObject
   - RPC_CloseAllDoors
+  - RPC_Freeze
+  - RPC_RequestEndRound
   DisableAutoOpenWizard: 1
   ShowSettings: 0

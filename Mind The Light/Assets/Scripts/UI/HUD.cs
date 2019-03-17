@@ -10,6 +10,11 @@ public class HUD : MonoBehaviour {
 
    public static bool Paused = false;
 
+   public TextMeshProUGUI localScoreText;
+   public TextMeshProUGUI remoteScoreText;
+   private int localScore = 0;
+   private int remoteScore = 0;
+
    public TextMeshProUGUI roundInfoText;
    public TextMeshProUGUI roundTimeText;
    public TextMeshProUGUI playersReadyText;
@@ -63,12 +68,21 @@ public class HUD : MonoBehaviour {
 
    #region Round
 
+   public void Reset() {
+      localScore = 0;
+      remoteScore = 0;
+
+      localScoreText.text = localScore.ToString();
+      remoteScoreText.text = remoteScore.ToString();
+   }
+
    public void UpdatePlayersReadyText(int playersReady) {
       playersReadyText.text = "Players ready [" + playersReady + "/" + Consts.GAME_SIZE + "]";
    }
 
-   public void UpdateRoundInfoText(string text) {
+   public void UpdateRoundInfoText(string text, bool disappear = true) {
       roundInfoText.text = text;
+      if(disappear)
       Invoke("UpdateRoundInfoText", 2f); //TODO da trasformare in fade out
    }
 
@@ -93,6 +107,24 @@ public class HUD : MonoBehaviour {
 
    private void UpdateRoundInfoText() {
       roundInfoText.text = "";
+   }
+
+   public void UpdateRoundScores(bool win, bool gameEnd) {
+      if (win) {
+         localScore++;
+         UpdateRoundInfoText("You win the round", false);
+      } 
+      else {
+         remoteScore++;
+         UpdateRoundInfoText("You lose the round", false);
+      }
+
+      if(gameEnd) {
+         UpdateRoundInfoText("You " + ((localScore > remoteScore) ? "win" : "lose")  + " the game", false);
+      }
+
+      localScoreText.text = localScore.ToString();
+      remoteScoreText.text = remoteScore.ToString();
    }
 
    #endregion

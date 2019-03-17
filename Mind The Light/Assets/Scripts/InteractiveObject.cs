@@ -14,12 +14,12 @@ public abstract class InteractiveObject : MonoBehaviour {
    }
 
    public virtual void OnEnterRange(Player interactor) {
-      Debug.Log(transform.name + ": ENTER RANGE");
+      //Debug.Log(transform.name + ": ENTER RANGE");
       sr.material.SetColor("_Color", outlineColor);
    }
 
    public virtual void OnExitRange(Player interactor) {
-      Debug.Log(transform.name + ": EXIT RANGE");
+      //Debug.Log(transform.name + ": EXIT RANGE");
       sr.material.SetColor("_Color", transparentColor);
    }
 

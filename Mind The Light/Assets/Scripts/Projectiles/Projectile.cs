@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour {
    void CheckCollisions(float moveDistance) {
       //Ray2D ray = new Ray2D(transform.position, rb.velocity);
       RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, moveDistance * 15, collisionMask);
-      Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance * 15, Color.red);
+      //Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance * 15, Color.red);
 
       if (hit) {
          OnHitObject(hit);
@@ -50,7 +50,7 @@ public class Projectile : MonoBehaviour {
          return;
       }
 
-      Debug.Log("Projectile hit: " + hit.transform.name);
+      //Debug.Log("Projectile hit: " + hit.transform.name);
 
       if(hit.collider.tag == "Spy") {
          Spy spy = hit.transform.GetComponent<Spy>();

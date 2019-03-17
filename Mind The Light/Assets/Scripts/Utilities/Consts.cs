@@ -12,7 +12,7 @@ public static class Consts {
    public static float TIMER_FULL_ROOM = 2;
 
    public static float TIMER_ROUND_START = 6;
-   public static float TIMER_ROUND_GAME = 111111;//301;
+   public static float TIMER_ROUND_GAME = 301;
 
    public static int GAME_SIZE = 2;
    public static int GAME_ROUNDS = 3;

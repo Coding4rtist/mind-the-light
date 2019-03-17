@@ -239,6 +239,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsOpen: 0
   IsLocked: 0
+  openSound: {fileID: 8300000, guid: 2c8f23b03e1f3074c99534d04c83b1b1, type: 3}
+  closeSound: {fileID: 8300000, guid: 91cf3e971f3d6204d878067bd989f92d, type: 3}
 --- !u!1 &7531726305135992171
 GameObject:
   m_ObjectHideFlags: 0

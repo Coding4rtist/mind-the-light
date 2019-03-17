@@ -93,7 +93,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
    public override void OnConnectedToMaster() {
       base.OnConnectedToMaster();
 
-      Debug.Log("Player has connected to the Photon master server");
+      //Debug.Log("Player has connected to the Photon master server");
 
       if (nickName == "") {
          UIManager.Instance.ToMainMenu(0);
@@ -163,7 +163,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
    public override void OnJoinedRoom() {
       base.OnJoinedRoom();
-      Debug.Log("You are now in room");
+      //Debug.Log("You are now in room");
 
       UIManager.Instance.ToMainMenu(MainMenuScreen.Room);
       SetRoomDefaults();
@@ -175,7 +175,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       photonPlayers = PhotonNetwork.PlayerList;
       playersInRoom = photonPlayers.Length;
 
-      Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
+      //Debug.Log("Displayer players in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
       roomName = PhotonNetwork.CurrentRoom.Name;
       roomNameText.text = PhotonNetwork.CurrentRoom.Name;
       roomStatusText.text = "<style=\"C1\">You joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
@@ -191,7 +191,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
 
    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
       base.OnPlayerEnteredRoom(newPlayer);
-      Debug.Log("A new player has joined the room");
+      //Debug.Log("A new player has joined the room");
 
       ClearPlayerListings();
       ListPlayers();
@@ -199,7 +199,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       photonPlayers = PhotonNetwork.PlayerList;
       playersInRoom++;
 
-      Debug.Log("Displayer player in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
+      //Debug.Log("Displayer player in room out of max players possible (" + playersInRoom + "/" + Consts.GAME_SIZE + ")");
       roomStatusText.text = "<style=\"C1\">A new player has joined the room [" + playersInRoom + "/" + Consts.GAME_SIZE + "]</style>";
 
       if (playersInRoom == Consts.GAME_SIZE) {
@@ -215,7 +215,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       base.OnPlayerLeftRoom(otherPlayer);
 
       playersInRoom--;
-      Debug.Log(otherPlayer.NickName + " has left the game");
+      //Debug.Log(otherPlayer.NickName + " has left the game");
 
       if (!isGameStarted) {
          PhotonNetwork.CurrentRoom.IsOpen = true;
@@ -321,7 +321,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks, IInRoomCallbacks {
       }
       roomName = roomNameInput.text;
 
-      Debug.Log("Trying to create a new room");
+      //Debug.Log("Trying to create a new room");
       RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = (byte)Consts.GAME_SIZE, CleanupCacheOnLeave = true };
       PhotonNetwork.CreateRoom(roomName, roomOps);
 
