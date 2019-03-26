@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 329045759741648907, guid: 9a0e100993d57fe4285f609f7234c728,
         type: 3}
       propertyPath: m_Name
-      value: Bush
+      value: Bush Int 1
       objectReference: {fileID: 0}
     - target: {fileID: 329045759741648908, guid: 9a0e100993d57fe4285f609f7234c728,
         type: 3}
@@ -102,6 +102,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.y
       value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 703786748247667704, guid: 9a0e100993d57fe4285f609f7234c728,
+        type: 3}
+      propertyPath: rolloffMode
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a0e100993d57fe4285f609f7234c728, type: 3}

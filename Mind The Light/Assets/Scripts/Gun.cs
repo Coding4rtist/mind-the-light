@@ -64,12 +64,13 @@ public class Gun : MonoBehaviour {
          audioSource.PlayOneShot(soundsShoot[currentAmmoInMag % 2]);
 
          // Projectile
-         //GameObject projectileGO = Instantiate(projectilePrefab, muzzleTransform.position, muzzleTransform.rotation);
-         //GameObject projectileGO = Photon.Pun.PhotonNetwork.InstantiateSceneObject(System.IO.Path.Combine(Consts.PHOTON_FOLDER, "Projectile"), muzzleTransform.position, muzzleTransform.rotation, 0);
-         GameObject projectileGO = PoolManager.Instance.GetPooledObject("Projectile", muzzleTransform.position, Quaternion.identity);
-         Projectile proj = projectileGO.GetComponent<Projectile>();
-         Vector2 direction = new Vector2(Mathf.Cos(aimAngle * Mathf.Deg2Rad), Mathf.Sin(aimAngle * Mathf.Deg2Rad));
-         proj.Setup(owner, direction * speed, delay, damage);
+         //GameObject projectileGO = PoolManager.Instance.GetPooledObject("Projectile", muzzleTransform.position, Quaternion.identity);
+         if (owner.p.PV.IsMine) {
+            GameObject projectileGO = Photon.Pun.PhotonNetwork.InstantiateSceneObject(System.IO.Path.Combine(Consts.PHOTON_FOLDER, "Projectile"), muzzleTransform.position, Quaternion.identity, 0);
+            Projectile proj = projectileGO.GetComponent<Projectile>();
+            Vector2 direction = new Vector2(Mathf.Cos(aimAngle * Mathf.Deg2Rad), Mathf.Sin(aimAngle * Mathf.Deg2Rad));
+            proj.Setup(owner, direction * speed, delay, damage);
+         }
 
          // Particles
          //GameObject shotFlashGO = Instantiate(shotFlashPrefab, muzzleTransform.position, muzzleTransform.rotation);

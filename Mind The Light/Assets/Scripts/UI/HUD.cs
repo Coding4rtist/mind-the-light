@@ -26,6 +26,7 @@ public class HUD : MonoBehaviour {
 
    [Header("Guard")]
    public GameObject[] ammo;
+   public GameObject alarmDirection;
    //private TextMeshProUGUI objectiveGuardText;
 
    [Header("Thief")]
@@ -53,7 +54,10 @@ public class HUD : MonoBehaviour {
       guardT.SetActive(actorID == 0);
       spyT.SetActive(actorID == 1);
 
-      if(actorID == 1) {
+      if(actorID == 0) {
+         alarmDirection.SetActive(false);
+      }
+      else {
          lastDamageHealthAmount = 1;
          healthImage.fillAmount = 1;
          damageImage.fillAmount = 1;
@@ -137,6 +141,20 @@ public class HUD : MonoBehaviour {
       }
    }
 
+   public void ShowAlarmDirection(Vector2 dir) {
+      float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 90f;
+      Debug.Log("SHOW ALARM " + angle);
+      alarmDirection.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+      alarmDirection.SetActive(true);
+      StartCoroutine(HideAlarmDirection());
+   }
+
+   private IEnumerator HideAlarmDirection() {
+      yield return new WaitForSeconds(3f);
+      alarmDirection.SetActive(false);
+   }
+
    #endregion
 
    #region Spy
@@ -155,3 +173,8 @@ public class HUD : MonoBehaviour {
 
    #endregion
 }
+
+
+// porta 171
+// pistola 250
+// bush 100

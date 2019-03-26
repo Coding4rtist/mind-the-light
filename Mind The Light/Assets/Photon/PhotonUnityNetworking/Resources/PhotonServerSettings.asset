@@ -57,5 +57,7 @@ MonoBehaviour:
   - RPC_CloseAllDoors
   - RPC_Freeze
   - RPC_RequestEndRound
+  - RPC_CloseAllLightSwitches
+  - RPC_InteractLightSwitch
   DisableAutoOpenWizard: 1
   ShowSettings: 0

@@ -49,7 +49,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: d605ab477bc20704abaee162e67b4f39, type: 3}
     - {fileID: 102900000, guid: 50daf11c61b3ad84cb658260037bd77f, type: 3}
     - {fileID: 102900000, guid: 93df42a799a4c884dbc22c3bea5ab308, type: 3}
-    totalSpriteSurfaceArea: 195645
+    totalSpriteSurfaceArea: 195931
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -340,6 +340,7 @@ SpriteAtlas:
   - {fileID: 21300004, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
   - {fileID: 21300002, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
   - {fileID: 21300000, guid: a3d3bff6ce1e2164f800f40b087b30ec, type: 3}
+  - {fileID: 21300000, guid: 7186b0b802f2c964b8ebcd014d56ff7e, type: 3}
   - {fileID: 21300008, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
   - {fileID: 21300010, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
   - {fileID: 21300012, guid: 2ac264696c43650489a20ccd1088be7e, type: 3}
@@ -394,6 +395,10 @@ SpriteAtlas:
   - {fileID: 21300032, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300030, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
   - {fileID: 21300028, guid: 80fec7e990ee306429869bc7a94eac18, type: 3}
+  - {fileID: 21300000, guid: 01923b3ba3629254cad424d947b5d2d7, type: 3}
+  - {fileID: 21300002, guid: 3606ec5b646ea3d40865d8aaa9ae6113, type: 3}
+  - {fileID: 21300000, guid: 3606ec5b646ea3d40865d8aaa9ae6113, type: 3}
+  - {fileID: 21300000, guid: 0d98ecab80d97c345b3f77ebe48fa367, type: 3}
   - {fileID: 21300202, guid: 2c4f951dac694ac4ea96e8961fbb6222, type: 3}
   - {fileID: 21300200, guid: 2c4f951dac694ac4ea96e8961fbb6222, type: 3}
   - {fileID: 21300206, guid: 2c4f951dac694ac4ea96e8961fbb6222, type: 3}
@@ -873,6 +878,7 @@ SpriteAtlas:
   - shot-flash_2
   - shot-flash_1
   - shot-flash_0
+  - Square
   - guard-spritesheet_4
   - guard-spritesheet_5
   - guard-spritesheet_6
@@ -927,6 +933,10 @@ SpriteAtlas:
   - door-1_16
   - door-1_15
   - door-1_14
+  - Circle
+  - light-switch_1
+  - light-switch_0
+  - Triangle
   - items_101
   - items_100
   - items_103

@@ -8,7 +8,7 @@ public abstract class Actor : MonoBehaviourPun {
 
    private const float ACCEL = 1.0f * 16;
    private const float FRIC = 2.0f * 16;
-   protected const float MAX_SPEED = 3.5f * 16;
+   private const float MAX_SPEED = 4.0f * 16; // 3.5f * 16;
 
    //public string state;
    protected float maxSpeed = MAX_SPEED;

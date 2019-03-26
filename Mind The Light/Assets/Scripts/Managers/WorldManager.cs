@@ -17,6 +17,7 @@ public class WorldManager : MonoBehaviourPun {
    private List<TargetObject> targetObjects;
    private List<GameObject> keysObjects;
    private List<Door> doors;
+   private List<LightSwitch> lightSwitches;
 
    private PhotonView PV;
 
@@ -30,6 +31,9 @@ public class WorldManager : MonoBehaviourPun {
 
       doors = FindObjectsOfType<Door>().ToList();
       doors.Sort((d1, d2) => { return d1.transform.GetSiblingIndex().CompareTo(d2.transform.GetSiblingIndex()); });
+
+      lightSwitches = FindObjectsOfType<LightSwitch>().ToList();
+      lightSwitches.Sort((d1, d2) => { return d1.transform.GetSiblingIndex().CompareTo(d2.transform.GetSiblingIndex()); });
    }
 
 
@@ -125,6 +129,34 @@ public class WorldManager : MonoBehaviourPun {
          }
       }
    }
+
+   #endregion
+
+   #region Light Switches
+
+   public void InteractLightSwitch(LightSwitch light) {
+      int id = light.transform.GetSiblingIndex();
+      PV.RPC("RPC_InteractLightSwitch", RpcTarget.AllViaServer, id);
+   }
+
+   [PunRPC]
+   public void RPC_InteractLightSwitch(int id) {
+      lightSwitches[id].SyncLight();
+   }
+
+   public void CloseAllLightSwitches() {
+      PV.RPC("RPC_CloseAllLightSwitches", RpcTarget.All);
+   }
+
+   [PunRPC]
+   public void RPC_CloseAllLightSwitches() {
+      foreach (LightSwitch light in lightSwitches) {
+         if (light.isON) {
+            light.SyncLight();
+         }
+      }
+   }
+
 
    #endregion
 

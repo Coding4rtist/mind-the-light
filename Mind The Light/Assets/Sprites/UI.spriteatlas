@@ -42,7 +42,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 37f788521255ca04b92f24082339cabd, type: 3}
-    totalSpriteSurfaceArea: 505475
+    totalSpriteSurfaceArea: 505731
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -51,6 +51,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 8bc128b157561a24b87a1c18066782a1, type: 3}
   - {fileID: 21300000, guid: 5af5f572b9a6cc4408a3569394dee01c, type: 3}
   - {fileID: 21300000, guid: a92af6c531c15e944a7225eb4763ff56, type: 3}
+  - {fileID: 21300000, guid: 56b6dbf527d277140b5da7fbd6d9c87b, type: 3}
   - {fileID: 21300000, guid: 569f28266db3d5f4ca10ef00b20597f2, type: 3}
   - {fileID: 21300000, guid: 59a671074d21e5d43b9d1890e8f0b8e2, type: 3}
   - {fileID: 21300000, guid: 7896b80732302d4448eb1398b629ef71, type: 3}
@@ -69,6 +70,7 @@ SpriteAtlas:
   - healthbar-foreground
   - healthbar-damaged
   - scrollbar-thumb
+  - arrow
   - healthbar-background
   - pausemenu
   - pistol-hud

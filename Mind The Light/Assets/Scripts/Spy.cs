@@ -5,8 +5,10 @@ using Photon.Pun;
 
 public class Spy : Actor {
 
+   private const float MAX_SPEED =  3.5f * 16;
+
    [SerializeField]
-   private float maxHealth = 100f;
+   private float maxHealth = 80f;
    private float curHealth;
    private bool isFlashing;
 
@@ -17,7 +19,6 @@ public class Spy : Actor {
    private GameObject fovGO;
 
    private List<TargetObject> objectsStolen = new List<TargetObject>();
-
 
    float freezeTime;
    bool freeze = false;
@@ -34,10 +35,36 @@ public class Spy : Actor {
       get { return objectsStolen.Count; }
    }
 
+
+
    private new void Awake() {
       base.Awake();
 
       fovGO = transform.GetChild(2).gameObject;
+   }
+
+   public override void SetDefaults() {
+      if (PhotonNetwork.IsMasterClient)
+         p.PV.RPC("RPC_SetDefaults", RpcTarget.All);
+   }
+
+   [PunRPC]
+   public override void RPC_SetDefaults() {
+      base.RPC_SetDefaults();
+
+      if (respawnCoroutine != null) {
+         StopCoroutine(respawnCoroutine);
+         respawnCoroutine = null;
+      }
+
+      fovGO.SetActive(p.PV.IsMine);
+
+      maxSpeed = MAX_SPEED;
+      isDead = false;
+      curHealth = maxHealth;
+      anim.SetBool("Dead", false);
+      objectsStolen = new List<TargetObject>();
+      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
    }
 
    private new void Update() {
@@ -65,30 +92,6 @@ public class Spy : Actor {
       freeze = value;
    }
 
-   public override void SetDefaults() {
-      if (PhotonNetwork.IsMasterClient)
-         p.PV.RPC("RPC_SetDefaults", RpcTarget.All);
-   }
-
-   [PunRPC]
-   public override void RPC_SetDefaults() {
-      base.RPC_SetDefaults();
-
-      if (respawnCoroutine != null) {
-         StopCoroutine(respawnCoroutine);
-         respawnCoroutine = null;
-      }
-
-      fovGO.SetActive(p.PV.IsMine);
-
-      maxSpeed =  MAX_SPEED + 6f;
-      isDead = false;
-      curHealth = maxHealth;
-      anim.SetBool("Dead", false);
-      objectsStolen = new List<TargetObject>();
-      HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
-   }
-
    public void OnSpyHit(Actor damager, float damage) {
       if (isDead)
          return;
@@ -99,6 +102,9 @@ public class Spy : Actor {
 
    private void Die(string killerName) {
       isDead = true;
+
+      velocity = Vector2.zero;
+
       // Disable components
       Debug.Log(transform.name + " is dead.");
       Chat.Instance.KillText(killerName, p.NickName);

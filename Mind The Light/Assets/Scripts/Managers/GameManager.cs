@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour {
    #region Actor Management (Server only)
 
    public void SpawnActors() {
-      //randomTeam = Random.Range(0, 2); //TODO uncomment
+      randomTeam = Random.Range(0, 2);
       currentRound = 0;
       guardsLinked = 0;
       spiesLinked = 0;
@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour {
       if (PlayersLinked == Consts.GAME_SIZE) {
          WorldManager.Instance.PlaceTargetObjects();
          WorldManager.Instance.CloseAllDoors();
+         WorldManager.Instance.CloseAllLightSwitches();
          myPlayer.PV.RPC("RPC_ReadyRound", RpcTarget.All, currentRound);
       }
       //UpdateTeam();

@@ -120,7 +120,7 @@ public class GunController : MonoBehaviourPun, IPunObservable {
          var ping = PhotonNetwork.GetPing();
          AttackResult result = gun.Shoot(0);
          if(result == AttackResult.Success || result == AttackResult.Reload) {
-            PV.RPC("RPC_Shoot", RpcTarget.Others, ping);
+            PV.RPC("RPC_Shoot", RpcTarget.Others, ping, gunAngle);
             //if(result == AttackResult.Success) {
             //   gun.DoScreenShake();
             //}
@@ -145,9 +145,10 @@ public class GunController : MonoBehaviourPun, IPunObservable {
    }
 
    [PunRPC]
-   protected void RPC_Shoot(int remotePing) {
+   protected void RPC_Shoot(int remotePing, float angle) {
       var ping = PhotonNetwork.GetPing();
       var delay = (float)(ping / 2 + remotePing / 2);
+      gun.aimAngle = angle;
       gun.Shoot(delay);
    }
 

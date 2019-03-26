@@ -52,6 +52,11 @@ public class TargetObject : InteractiveObject {
    public void SyncSteal() {
       objectSR.enabled = false;
       audioS.Play();
+
+      Debug.Log("SYNC STEAL " + Camera.main.WorldToScreenPoint(transform.position));
+      Vector2 targetDir = new Vector2(Screen.width / 2f, Screen.height / 2f) - (Vector2)Camera.main.WorldToScreenPoint(transform.position);
+      Debug.Log(targetDir.normalized);
+      HUD.Instance.ShowAlarmDirection(targetDir.normalized);
    }
 
    public bool IsStolen() {

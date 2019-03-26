@@ -37,8 +37,8 @@ public class Projectile : MonoBehaviour {
 
    void CheckCollisions(float moveDistance) {
       //Ray2D ray = new Ray2D(transform.position, rb.velocity);
-      RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, moveDistance * 15, collisionMask);
-      //Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity.normalized * moveDistance * 15, Color.red);
+      RaycastHit2D hit = Physics2D.Raycast(transform.position, rb.velocity.normalized, rb.velocity.magnitude * Time.fixedDeltaTime, collisionMask);
+      //Debug.DrawLine(transform.position, (Vector2)transform.position + rb.velocity * Time.fixedDeltaTime, Color.red);
 
       if (hit) {
          OnHitObject(hit);
@@ -70,7 +70,8 @@ public class Projectile : MonoBehaviour {
 
       }
 
-      gameObject.SetActive(false);
+      //gameObject.SetActive(false);
+      PhotonNetwork.Destroy(gameObject);
    }
 
    public void Setup(Actor _shooter, Vector2 _velocity, float _delay, float _damage) {
