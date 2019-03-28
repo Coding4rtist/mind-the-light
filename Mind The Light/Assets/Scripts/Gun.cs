@@ -65,7 +65,7 @@ public class Gun : MonoBehaviour {
 
          // Projectile
          //GameObject projectileGO = PoolManager.Instance.GetPooledObject("Projectile", muzzleTransform.position, Quaternion.identity);
-         if (owner.p.PV.IsMine) {
+         if (Photon.Pun.PhotonNetwork.IsMasterClient) {
             GameObject projectileGO = Photon.Pun.PhotonNetwork.InstantiateSceneObject(System.IO.Path.Combine(Consts.PHOTON_FOLDER, "Projectile"), muzzleTransform.position, Quaternion.identity, 0);
             Projectile proj = projectileGO.GetComponent<Projectile>();
             Vector2 direction = new Vector2(Mathf.Cos(aimAngle * Mathf.Deg2Rad), Mathf.Sin(aimAngle * Mathf.Deg2Rad));

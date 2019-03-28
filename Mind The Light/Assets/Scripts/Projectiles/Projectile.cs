@@ -71,7 +71,8 @@ public class Projectile : MonoBehaviour {
       }
 
       //gameObject.SetActive(false);
-      PhotonNetwork.Destroy(gameObject);
+      if(PhotonNetwork.IsMasterClient)
+         PhotonNetwork.Destroy(gameObject);
    }
 
    public void Setup(Actor _shooter, Vector2 _velocity, float _delay, float _damage) {

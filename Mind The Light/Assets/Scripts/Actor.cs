@@ -20,9 +20,6 @@ public abstract class Actor : MonoBehaviourPun {
    [HideInInspector]
    protected bool isDead = false;
 
-   //public Vector3 movDir = Vector3.zero;
-   //public float moveForce = 100f;
-   //private float dirVel;
    public bool slowdown;
    public float bushSlowdown;
 

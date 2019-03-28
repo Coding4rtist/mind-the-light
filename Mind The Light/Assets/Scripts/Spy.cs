@@ -65,6 +65,7 @@ public class Spy : Actor {
       anim.SetBool("Dead", false);
       objectsStolen = new List<TargetObject>();
       HUD.Instance.UpdateHealthBar(curHealth / maxHealth);
+      HUD.Instance.UpdateObjectsStolen(0);
    }
 
    private new void Update() {
