@@ -60,4 +60,4 @@ MonoBehaviour:
   - RPC_CloseAllLightSwitches
   - RPC_InteractLightSwitch
   DisableAutoOpenWizard: 1
-  ShowSettings: 0
+  ShowSettings: 1
