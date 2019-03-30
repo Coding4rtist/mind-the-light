@@ -37,7 +37,8 @@ The controls of Mind The Light! they are elementary: W, A, S, D or the direction
 
 # Game Aesthetics & User Interface
 
-The graphic style of Mind the Light evokes a pixellated 2D reality that was not created simply for an aesthetic issue but for a technical issue, as the game requires few computational resources and can even run on low-end PCs. Without considering the fact that this choice allows not to use objects that are too complex, which would have made the development of a project carried out by only two people too long. The development of modular tilesets in the realization of the map is perfect to decompose and recompose the game map during the design phase without much effort.![game2](C:\Users\Carlo\Documents\Unity\mind-the-light\img\game2.png)
+The graphic style of Mind the Light evokes a pixellated 2D reality that was not created simply for an aesthetic issue but for a technical issue, as the game requires few computational resources and can even run on low-end PCs. Without considering the fact that this choice allows not to use objects that are too complex, which would have made the development of a project carried out by only two people too long. The development of modular tilesets in the realization of the map is perfect to decompose and recompose the game map during the design phase without much effort.
+![game2](.\img\game2.png)
 
 # Schedule
 
